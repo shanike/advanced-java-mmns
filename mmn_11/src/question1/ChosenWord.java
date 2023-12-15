@@ -1,5 +1,15 @@
 package question1;
 
+/**
+ * The ChosenWord class hold all logic for a random word (generate with a
+ * WordBank instance), which is the chosen word. And a {@code String} that
+ * represents the chosen word for the user to "guess"
+ * 
+ * Note: Debated whether the name "ChosenWord" is correct for storing both the
+ * random-word and the hidden-word. But if the hidden-word logic would have been
+ * in the Game class, 1) there would be nothing here, and 2) the Game class
+ * would have been too big
+ */
 public class ChosenWord {
 
 	private final static String HIDDEN_CHAR = "_";

@@ -94,6 +94,10 @@ public class Game {
 		System.out.print("The word was: \"" + chosenWord.getHiddenWord() + "\"!");
 		String guessesText = "guess";
 		if (guessesCount >= 1) {
+			/*
+			 * Even though a word should contain more than one letter, and therefore
+			 * guessesCount should always be more that 1... Just in case ¯\_(ツ)_/¯
+			 */
 			guessesText += "es";
 		}
 		System.out.println(" and it took you " + guessesCount + " " + guessesText + "!");
