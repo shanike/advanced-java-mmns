@@ -34,17 +34,17 @@ public class ChosenWord {
 	/**
 	 * Uncovers the given {@code letter} from the {@code hiddenWord} and
 	 * 
-	 * @return whether or not the {@code letter} was in the chosen {@code word}
+	 * @return the number of characters that were uncovered
 	 */
-	public boolean uncoverLetter(char letter) {
-		boolean foundLetter = false;
+	public int uncoverLetter(char letter) {
+		int uncoveredCount = 0;
 		int index = word.indexOf(letter);
 		while (index >= 0) {
-			foundLetter = true;
+			uncoveredCount++;	
 			hiddenWord = hiddenWord.substring(0, index) + letter + hiddenWord.substring(index + 1);
 			index = word.indexOf(letter, index + 1);
 		}
-		return foundLetter;
+		return uncoveredCount;
 	}
 
 	/**

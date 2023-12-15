@@ -70,15 +70,25 @@ public class Game {
 		// Prompt user to guess a letter
 		char guess = scanValidGuess();
 
-		// Update usedLetters list
-		addToUsedLetters(guess);
+		// Update used-letters list
+		boolean isNewGuess = addToUsedLetters(guess);
 
-		// Update chosenWord
-		boolean didUncover = chosenWord.uncoverLetter(guess);
-		if (didUncover) {
-			System.out.println("\nNice!");
+		System.out.print("\n> ");
+		if (!isNewGuess) {
+			System.out.println("Hmm, you already guessed this letter though... let's try a new guess!");
 		} else {
-			System.out.println("\nHmm, try another guess");
+			// Update chosenWord
+			int uncoveredCount = chosenWord.uncoverLetter(guess);
+			if (uncoveredCount <= 0) {
+				System.out.println("Hmm, nope... Let's try another guess!");
+			} else {
+				String msg = "Nice! You uncovered " + uncoveredCount + " letter";
+				if (uncoveredCount > 1) {
+					msg += "s";
+				}
+				msg += "!";
+				System.out.println(msg);
+			}
 		}
 		// Increment guesses count
 		guessesCount++;
@@ -170,10 +180,12 @@ public class Game {
 	 * Adds the {@code letter} to the letterUsed array, unless the letter is already
 	 * there.
 	 */
-	private void addToUsedLetters(char letter) {
+	private boolean addToUsedLetters(char letter) {
 		if (lettersUsed.indexOf(letter) == -1) {
 			lettersUsed.add(letter);
+			return true;
 		}
+		return false;
 	}
 
 }
