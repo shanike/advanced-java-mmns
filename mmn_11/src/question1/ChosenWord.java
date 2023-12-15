@@ -23,7 +23,6 @@ public class ChosenWord {
 
 	public ChosenWord() {
 		word = wordBank.getRandomWord();
-		System.out.println("#DEBUG# word: " + word);
 		hiddenWord = populateWith(HIDDEN_CHAR, word.length());
 	}
 
