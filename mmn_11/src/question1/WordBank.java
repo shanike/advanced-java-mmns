@@ -7,9 +7,8 @@ import java.util.Random;
  * {@code final static WORD_LIST}.
  */
 public class WordBank {
-	private final static String[] WORDS_LIST = new String[] { "hi" };
-	// { "hello", "bye", "israel", "hebrew", "english", "open", "university",
-	// "java", "typescript" };
+	private final static String[] WORDS_LIST = new String[] { "hello", "bye", "israel", "hebrew", "english", "open",
+			"university", "java", "typescript" };
 
 	public String getRandomWord() {
 		Random r = new Random();
