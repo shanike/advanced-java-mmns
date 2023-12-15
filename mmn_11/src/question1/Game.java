@@ -9,8 +9,8 @@ public class Game {
 	 * @refactor: this can be changed to a {@code Set} data type. Although i'm not
 	 *            gonna do so because I'm not 100% sure it's allowed.
 	 */
-	private final static char[] ALPHABET = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-			'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+	private final static ArrayList<Character> ALPHABET = new ArrayList<Character>(Arrays.asList('A', 'B', 'C', 'D', 'E',
+			'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'));
 	private final static char INVALID_LETTER = '!';
 
 	private ChosenWord chosenWord = new ChosenWord();
@@ -65,7 +65,7 @@ public class Game {
 	 */
 	public void handleSingleGuessing() {
 		prettyPrintHiddenWord();
-		prettyPrintLettersUsed();
+		prettyPrintUnusedLetters();
 
 		// Prompt user to guess a letter
 		char guess = scanValidGuess();
@@ -122,7 +122,7 @@ public class Game {
 	private char scanValidGuess() {
 		while (true) {
 			System.out.print("\nWhat's your guess? ");
-			String userInput = scanner.nextLine();
+			String userInput = scanner.nextLine().toLowerCase();
 			char guessChar = validateGuess(userInput);
 			if (guessChar != INVALID_LETTER) {
 				return guessChar;
@@ -140,7 +140,8 @@ public class Game {
 			return INVALID_LETTER;
 		}
 		char guessChar = guessStr.charAt(0);
-		if (Arrays.toString(ALPHABET).indexOf(Character.toUpperCase(guessChar)) == -1) {
+		// Validate the guess is in the alphabet
+		if (ALPHABET.indexOf(Character.toUpperCase(guessChar)) == -1) {
 			System.out.println("Invalid input: please enter an English letter");
 			return INVALID_LETTER;
 		}
@@ -161,21 +162,50 @@ public class Game {
 	}
 
 	/**
-	 * Prints a pretty, spaced-out and comma-separated string; representing the list
-	 * of used letters
+	 * @return a list of letters that were not used yet
 	 */
-	private void prettyPrintLettersUsed() {
-		System.out.print("* Letters used: ");
-		if (lettersUsed.size() == 0) {
-			System.out.println("No letters were used yet (:");
-			return;
+	private ArrayList<Character> getUnusedLetters() {
+		ArrayList<Character> unusedLetters = new ArrayList<Character>();
+
+		// Loop over alphabet
+		for (Character letter : ALPHABET) {
+			// For every letter, check if used
+			boolean wasLetterUsed = false;
+			if (lettersUsed.size() != 0) {
+				for (Character usedLetter : lettersUsed) {
+					if (letter.equals(Character.toUpperCase(usedLetter))) {
+						// This alphabet letter was used
+						wasLetterUsed = true;
+						break;
+					}
+				}
+			}
+
+			if (!wasLetterUsed) {
+				unusedLetters.add(letter);
+			}
 		}
-		String prettyUsedLetters = lettersUsed.get(0).toString();
-		for (int i = 1; i < lettersUsed.size(); i++) {
-			Character wordChar = lettersUsed.get(i);
-			prettyUsedLetters += ", " + wordChar;
+
+		return unusedLetters;
+	}
+
+	/**
+	 * Prints a pretty, spaced-out and comma-separated string; representing the list
+	 * of letters not used yet
+	 */
+	private void prettyPrintUnusedLetters() {
+		System.out.print("* Letters not used: ");
+		ArrayList<Character> unusedLetters = getUnusedLetters();
+		String prettyUnsedLetters = "None..."; // Initialize
+		if (unusedLetters.size() > 0) {
+			prettyUnsedLetters = unusedLetters.get(0).toString();
+			for (int i = 1; i < unusedLetters.size(); i++) {
+				Character unusedLetter = unusedLetters.get(i);
+				prettyUnsedLetters += ", " + unusedLetter;
+			}
 		}
-		System.out.println(prettyUsedLetters);
+
+		System.out.println(prettyUnsedLetters);
 	}
 
 	/**
