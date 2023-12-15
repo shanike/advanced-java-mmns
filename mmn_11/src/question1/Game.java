@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class Game {
 	/**
-	 * @REFACTOR: this can be changed to a {@code Set} data type. I'm not gonna do
-	 *            so because I'm not sure it's allowed.
+	 * @refactor: this can be changed to a {@code Set} data type. Although i'm not
+	 *            gonna do so because I'm not 100% sure it's allowed.
 	 */
 	private final static char[] ALPHABET = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
 			'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
@@ -49,7 +49,7 @@ public class Game {
 	}
 
 	/**
-	 * Start playing the game! Prints all game components
+	 * Start playing the game! Prints all components for a single game
 	 */
 	public void start() {
 		System.out.println("Welcome to our game!\n\nGuess the word!\n===============");
@@ -61,11 +61,11 @@ public class Game {
 	}
 
 	/**
-	 * Prints and handles the "guessing" step, where user needs to guess the word
+	 * Prints and handles the "guessing" step, where user needs to guess a letter
 	 */
 	public void handleSingleGuessing() {
-		System.out.println("\n" + getPrettyHiddenWord());
-		System.out.println("\n* Letters used: " + getPrettyLettersUsed());
+		prettyPrintHiddenWord();
+		prettyPrintLettersUsed();
 
 		// Prompt user to guess a letter
 		char guess = scanValidGuess();
@@ -99,7 +99,7 @@ public class Game {
 	 * the word
 	 */
 	public void handleSuccess() {
-		System.out.println("\n" + getPrettyHiddenWord() + "\n");
+		prettyPrintHiddenWord();
 		System.out.println("Hurray! You guessed the word!");
 		System.out.print("The word was: \"" + chosenWord.getHiddenWord() + "\"!");
 		String guessesText = "guess";
@@ -148,37 +148,41 @@ public class Game {
 	}
 
 	/**
-	 * @return a pretty, spaced-out string, representing the hidden word
+	 * Prints a pretty, spaced-out string; representing the hidden word
 	 */
-	private String getPrettyHiddenWord() {
+	private void prettyPrintHiddenWord() {
 		String[] wordChars = chosenWord.getHiddenWord().split("");
 		String prettyHiddenWord = wordChars[0];
 		for (int i = 1; i < wordChars.length; i++) {
 			String wordChar = wordChars[i];
 			prettyHiddenWord += " " + wordChar;
 		}
-		return prettyHiddenWord;
+		System.out.println("\n" + prettyHiddenWord + "\n");
 	}
 
 	/**
-	 * @return a pretty, spaced-out and comma-separated string of a list of the used
-	 *         letters
+	 * Prints a pretty, spaced-out and comma-separated string; representing the list
+	 * of used letters
 	 */
-	private String getPrettyLettersUsed() {
+	private void prettyPrintLettersUsed() {
+		System.out.print("* Letters used: ");
 		if (lettersUsed.size() == 0) {
-			return "No letters were used yet (:";
+			System.out.println("No letters were used yet (:");
+			return;
 		}
 		String prettyUsedLetters = lettersUsed.get(0).toString();
 		for (int i = 1; i < lettersUsed.size(); i++) {
 			Character wordChar = lettersUsed.get(i);
 			prettyUsedLetters += ", " + wordChar;
 		}
-		return prettyUsedLetters;
+		System.out.println(prettyUsedLetters);
 	}
 
 	/**
 	 * Adds the {@code letter} to the letterUsed array, unless the letter is already
 	 * there.
+	 * 
+	 * @return whether the letter wasn't used yet or not
 	 */
 	private boolean addToUsedLetters(char letter) {
 		if (lettersUsed.indexOf(letter) == -1) {
