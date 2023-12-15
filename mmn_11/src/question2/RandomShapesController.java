@@ -17,7 +17,7 @@ public class RandomShapesController {
 	private final int NUM_OF_SHAPE_VARIANTS = 3;
 	private final int NUM_OF_SHAPES = 10;
 
-	private final int MAX_RGB_RANGE = 255;
+	private final int MAX_RGB_VALUE = 255;
 
 	private int canvasHeight = -1;
 	private int canvasWidth = -1;
@@ -38,14 +38,14 @@ public class RandomShapesController {
 		canvasWidth = (int) canvas.getWidth();
 		maxShapeHeight = canvasHeight / 4;
 		maxShapeWidth = canvasWidth / 4;
-		drawShapes();
+		drawRandomShapes();
 	}
 
 	/**
 	 * @returns a randomly generated color component (i.e a single R, G or B)
 	 */
 	private int generateRandomColorComponent() {
-		return (new Random()).nextInt(MAX_RGB_RANGE + 1);
+		return (new Random()).nextInt(MAX_RGB_VALUE + 1);
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class RandomShapesController {
 	/**
 	 * Draws `NUM_OF_SHAPES` random shapes in random colors.
 	 */
-	private void drawShapes() {
+	private void drawRandomShapes() {
 		for (int i = 0; i < NUM_OF_SHAPES; i++) {
 			drawRandomShape();
 		}
@@ -116,7 +116,7 @@ public class RandomShapesController {
 	@FXML
 	private void handleRefreshButtonClick(ActionEvent event) {
 		clearCanvas();
-		drawShapes();
+		drawRandomShapes();
 	}
 
 }
