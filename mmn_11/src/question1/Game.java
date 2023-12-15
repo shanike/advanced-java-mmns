@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * Our main class which runs rounds of our game!
+ */
 public class Game {
 	/**
 	 * @refactor: this can be changed to a {@code Set} data type. Although i'm not
@@ -50,6 +53,8 @@ public class Game {
 
 	/**
 	 * Start playing the game! Prints all components for a single game
+	 * 
+	 * * The game is case-insensitive
 	 */
 	public void start() {
 		System.out.println("Welcome to our game!\n\nGuess the word!\n===============");
