@@ -5,10 +5,10 @@ package question1;
  * WordBank instance), which is the chosen word. And a {@code String} that
  * represents the chosen word for the user to "guess"
  * 
- * Note: Debated whether the name "ChosenWord" is correct for storing both the
- * random-word and the hidden-word. But if the hidden-word logic would have been
- * in the Game class, 1) there would be nothing here, and 2) the Game class
- * would have been too big
+ * @note Debated whether the name "ChosenWord" is correct for storing both the
+ *       random-word and the hidden-word. But if the hidden-word logic would
+ *       have been in the Game class, 1) there would be nothing here, and 2) the
+ *       Game class would have been too big
  */
 public class ChosenWord {
 
@@ -39,7 +39,7 @@ public class ChosenWord {
 		int uncoveredCount = 0;
 		int index = word.indexOf(letter);
 		while (index >= 0) {
-			uncoveredCount++;	
+			uncoveredCount++;
 			hiddenWord = hiddenWord.substring(0, index) + letter + hiddenWord.substring(index + 1);
 			index = word.indexOf(letter, index + 1);
 		}
