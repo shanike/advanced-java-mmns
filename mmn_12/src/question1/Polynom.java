@@ -9,6 +9,14 @@ public class Polynom {
 
     private static final String BAD_REQUEST_MESSAGE = "BAD_REQUEST";
 
+    /**
+     * Creates a new Polynom instance.
+     * @param coefficients
+     * @param exponents
+     * @throws Exception if coefficient or exponents array are invalid: 
+     * 1) If the arrays are not the same length.
+     * 2) If there's a non-natural integer in {@code exponents}
+     */
     public Polynom(double[] coefficients, int[] exponents) throws Exception {
         if (coefficients.length != exponents.length) {
             throw new Exception(BAD_REQUEST_MESSAGE);
