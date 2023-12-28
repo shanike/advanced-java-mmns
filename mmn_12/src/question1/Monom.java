@@ -13,7 +13,7 @@ public class Monom implements Comparable<Object> {
         this.coefficient += valueToAdd;
     }
 
-    public void subtractToCoefficient(double valueToSubtract) {
+    public void subtractFromCoefficient(double valueToSubtract) {
         this.coefficient -= valueToSubtract;
     }
 

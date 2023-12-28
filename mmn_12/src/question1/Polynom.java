@@ -27,6 +27,13 @@ public class Polynom {
     }
 
     /**
+     * Create an empty Polynom.
+     */
+    private Polynom() {
+        this.monoms = new ArrayList<Monom>();
+    }
+
+    /**
      * @param otherPolynom to add to {@code this} polynom
      * @return a new polynom representing the result of adding {@code otherPolynom}
      *         to {@code this} polynom
@@ -70,11 +77,16 @@ public class Polynom {
     }
 
     /**
-     * TODO: continue this method. yesterday I stopped here
+     * TODO: test this!
      */
-    // public Polynom minus(Polynom otherPolynomObj) throws Exception {
-
-    // }
+    public Polynom minus(Polynom otherPolynom) throws Exception {
+        Polynom oppositeOtherPolynom = new Polynom();
+        for (Monom monom : otherPolynom.monoms) {
+            Monom negativeMonom = new Monom(-1*monom.coefficient, monom.exponent);
+            oppositeOtherPolynom.addMonomToPolynom(negativeMonom);
+        }
+        return this.plus(oppositeOtherPolynom);
+    }
 
     /**
      * TODO: if coefficient is 0
