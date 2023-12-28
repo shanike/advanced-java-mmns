@@ -91,7 +91,10 @@ public class Polynom {
     }
 
     /**
-     * TODO: test this!
+     * @param otherPolynom to subtract from {@code this} polynom
+     * @return a new polynom representing the result of subtracting
+     *         {@code otherPolynom} from {@code this} polynom
+     * @throws Exception if the generated polynom is invalid.
      */
     public Polynom minus(Polynom otherPolynom) throws Exception {
         Polynom oppositeOtherPolynom = new Polynom();
