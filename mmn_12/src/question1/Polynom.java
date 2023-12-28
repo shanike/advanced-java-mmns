@@ -75,26 +75,6 @@ public class Polynom {
     }
 
     /**
-     * A private method for adding a new Monom to {@code this} polynom
-     */
-    private void addMonomToPolynom(Monom monomToAdd) {
-        boolean doesExponentExists = false;
-        for (Monom monom : this.monoms) {
-            if (monom.exponent == monomToAdd.exponent) {
-                // Exponent exists in this polynom
-                doesExponentExists = true;
-                monom.addToCoefficient(monomToAdd.coefficient);
-                break;
-            }
-        }
-        if (!doesExponentExists) {
-            // This polynom doesn't have this exponent yet
-            Monom copiedMonom = new Monom(monomToAdd.coefficient, monomToAdd.exponent);
-            this.monoms.add(copiedMonom);
-        }
-    }
-
-    /**
      * @param otherPolynom to subtract from {@code this} polynom
      * @return a new polynom representing the result of subtracting
      *         {@code otherPolynom} from {@code this} polynom
@@ -150,7 +130,8 @@ public class Polynom {
                 finalStr += monom.coefficient;
             } else if (monom.coefficient == -1) {
                 /**
-                 * The coefficient is -1, (and the exponent is **not** 0) and even though it's negative:
+                 * The coefficient is -1, (and the exponent is **not** 0) and even though it's
+                 * negative:
                  * render the "-" because we don't render the coefficient itself when it's -1
                  */
                 finalStr += "-";
@@ -173,9 +154,29 @@ public class Polynom {
                     finalStr += "^" + monom.exponent;
                 }
             }
-            
+
         }
         return finalStr;
+    }
+
+    /**
+     * A private method for adding a new Monom to {@code this} polynom
+     */
+    private void addMonomToPolynom(Monom monomToAdd) {
+        boolean doesExponentExists = false;
+        for (Monom monom : this.monoms) {
+            if (monom.exponent == monomToAdd.exponent) {
+                // Exponent exists in this polynom
+                doesExponentExists = true;
+                monom.addToCoefficient(monomToAdd.coefficient);
+                break;
+            }
+        }
+        if (!doesExponentExists) {
+            // This polynom doesn't have this exponent yet
+            Monom copiedMonom = new Monom(monomToAdd.coefficient, monomToAdd.exponent);
+            this.monoms.add(copiedMonom);
+        }
     }
 
 }
