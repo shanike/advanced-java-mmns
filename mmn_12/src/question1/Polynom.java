@@ -136,19 +136,6 @@ public class Polynom {
         String finalStr = "";
         for (int i = 0; i < monoms.size(); i++) {
             Monom monom = monoms.get(i);
-
-            if (monom.exponent == 0) {
-                /*
-                 * The exponent is 0:
-                 * render only the coefficient.
-                 */
-                if (monom.coefficient >= 0) {
-                    finalStr += "+";
-                }
-                finalStr += monom.coefficient;
-                continue;
-            }
-
             if (i != 0 && monom.coefficient >= 0) {
                 /*
                  * The coefficient is a positive number in the middle of the polynom:
@@ -157,29 +144,39 @@ public class Polynom {
                 finalStr += "+";
             }
 
-            if (Math.abs(monom.coefficient) != 1) {
+            if (Math.abs(monom.coefficient) != 1 || monom.exponent == 0) {
                 /*
-                 * The coefficient is **not** 1 and **not** -1:
+                 * The coefficient is **not** 1 and **not** -1,
+                 * OR it **is** 1 or -1 **but** the exponent is 0:
                  * render the coefficient.
                  */
                 finalStr += monom.coefficient;
             } else if (monom.coefficient == -1) {
                 /**
-                 * The coefficient is -1, and even though it's negative:
+                 * The coefficient is -1, (and the exponent is **not** 0) and even though it's negative:
                  * render the "-" because we don't render the coefficient itself when it's -1
                  */
                 finalStr += "-";
             }
 
-            finalStr += "x";
+            // * SUM: we set the coefficient
 
-            if (monom.exponent != 1.0) {
+            if (monom.exponent != 0) {
                 /*
-                 * If the exponent is **not** 1:
-                 * render the exponent.
+                 * The exponent is **not** 0:
+                 * render the "x" (/and the exponent/).
                  */
-                finalStr += "^" + monom.exponent;
+                finalStr += "x";
+
+                if (monom.exponent != 1) {
+                    /*
+                     * If the exponent is **not** 1:
+                     * render the exponent.
+                     */
+                    finalStr += "^" + monom.exponent;
+                }
             }
+            
         }
         return finalStr;
     }
