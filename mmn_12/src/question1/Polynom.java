@@ -73,6 +73,9 @@ public class Polynom {
         return summedPolynom;
     }
 
+    /**
+     * A private method for adding a new Monom to {@code this} polynom
+     */
     private void addMonomToPolynom(Monom monomToAdd) {
         boolean doesExponentExists = false;
         for (Monom monom : this.monoms) {
@@ -106,7 +109,6 @@ public class Polynom {
     }
 
     /**
-     * 
      * @return a new polynom representing the derivative of {@code this} Polynom
      */
     public Polynom derive() {
