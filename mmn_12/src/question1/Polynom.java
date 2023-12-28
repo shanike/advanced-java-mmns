@@ -126,9 +126,6 @@ public class Polynom {
         return derivedPolynom;
     }
 
-    /**
-     * TODO: if coefficient is 0
-     */
     public String toString() {
         if (monoms.size() <= 0) {
             return "Empty polynom";
