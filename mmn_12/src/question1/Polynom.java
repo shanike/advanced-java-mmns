@@ -181,23 +181,4 @@ public class Polynom {
         return finalStr;
     }
 
-    /**
-     * Converts an {@code ArrayList} of {@code Integer}s to a simpler {@code int}
-     * array.
-     * 
-     * @return the new converted {@code int} array
-     */
-    private int[] listToIntArr(ArrayList<Integer> list) {
-        return list.stream().mapToInt(i -> i).toArray();
-    }
-
-    /**
-     * Converts an {@code ArrayList} of {@code Double}s to a simpler {@code double}
-     * array.
-     * 
-     * @return the new converted {@code double} array
-     */
-    private double[] listToDoubleArr(ArrayList<Double> list) {
-        return list.stream().mapToDouble(i -> i).toArray();
-    }
 }
