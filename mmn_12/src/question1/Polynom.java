@@ -99,10 +99,28 @@ public class Polynom {
     public Polynom minus(Polynom otherPolynom) throws Exception {
         Polynom oppositeOtherPolynom = new Polynom();
         for (Monom monom : otherPolynom.monoms) {
-            Monom negativeMonom = new Monom(-1*monom.coefficient, monom.exponent);
+            Monom negativeMonom = new Monom(-1 * monom.coefficient, monom.exponent);
             oppositeOtherPolynom.addMonomToPolynom(negativeMonom);
         }
         return this.plus(oppositeOtherPolynom);
+    }
+
+    /**
+     * 
+     * @return a new polynom representing the derivative of {@code this} Polynom
+     */
+    public Polynom derive() {
+        Polynom derivedPolynom = new Polynom();
+        for (Monom monom : this.monoms) {
+            if (monom.exponent <= 0) {
+                // If exponent is 0: the derived polynom will not have this coefficient
+                continue;
+            }
+            Monom derivedMonom = new Monom(monom.exponent * monom.coefficient, monom.exponent - 1);
+            derivedPolynom.addMonomToPolynom(derivedMonom);
+        }
+        // * If {@code this.monoms} is ordered by exponent, then also derivedPolynom is.
+        return derivedPolynom;
     }
 
     /**
