@@ -14,6 +14,12 @@ public class Polynom {
             throw new Exception(BAD_REQUEST_MESSAGE);
         }
 
+        for (int exponent : exponents) {
+            if (exponent < 0) {
+                throw new Exception(BAD_REQUEST_MESSAGE);
+            }
+        }
+
         ArrayList<Monom> polynom = new ArrayList<Monom>();
         int polynomLength = coefficients.length;
         for (int i = 0; i < polynomLength; i++) {
