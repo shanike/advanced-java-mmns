@@ -106,6 +106,31 @@ public class Polynom {
         return derivedPolynom;
     }
 
+    /**
+     * @return whether or not the monoms of the other {@code obj}
+     *         ({@code instanceof Polynom}) are equal to this polynom's monoms
+     */
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Polynom)) {
+            return false;
+        }
+
+        Polynom otherPolynom = (Polynom) obj;
+
+        if (otherPolynom.monoms.size() != this.monoms.size()) {
+            return false;
+        }
+        for (int i = 0; i < this.monoms.size(); i++) {
+            if (this.monoms.get(i).coefficient != otherPolynom.monoms.get(i).coefficient) {
+                return false;
+            }
+            if (this.monoms.get(i).exponent != otherPolynom.monoms.get(i).exponent) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public String toString() {
         if (monoms.size() <= 0) {
             return "Empty polynom";
