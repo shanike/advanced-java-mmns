@@ -138,9 +138,11 @@ public class Polynom {
         if (monoms.size() <= 0) {
             return "Empty polynom";
         }
+
         String finalStr = "";
         for (int i = 0; i < monoms.size(); i++) {
             Monom monom = monoms.get(i);
+
             if (i != 0 && monom.coefficient >= 0) {
                 /*
                  * The coefficient is a positive number in the middle of the polynom:
@@ -167,7 +169,7 @@ public class Polynom {
 
             // * SUM: we set the coefficient
 
-            if (monom.exponent != 0) {
+            if (monom.exponent != 0 && monom.coefficient != 0) {
                 /*
                  * The exponent is **not** 0:
                  * render the "x" (/and the exponent/).
