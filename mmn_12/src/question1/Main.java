@@ -127,7 +127,7 @@ public class Main {
                         + "\" for minus, \"" + OPERATION_DERIVE
                         + "\" for derive, \"" + OPERATION_TO_STRING
                         + "\" for toString, \"" + OPERATION_EQUALS + "\" for equals.");
-        System.out.println("(Press any other key to exit)");
+        System.out.println("(Any other key to exit)");
         String userInput = scanner.nextLine();
         for (int operation : POLYNOM_OPERATIONS) {
             if (userInput.equals(Integer.toString(operation))) {
