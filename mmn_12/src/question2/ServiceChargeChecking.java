@@ -44,13 +44,10 @@ public class ServiceChargeChecking extends CheckingAccount {
 
 	/**
 	 * The monthly management charges the monthly fee
+	 * @throws IllegalBalanceException 
 	 */
-	public void monthlyManagement() {
-		try {
-			this.withdrawal(this.monthlyFee);
-		} catch (IllegalBalanceException e) {
-			System.out.println("Error taking monthly fee, " + e.toString());
-		}
+	public void monthlyManagement() throws IllegalBalanceException {
+		this.withdrawal(this.monthlyFee);
 	}
 
 	public String toString() {

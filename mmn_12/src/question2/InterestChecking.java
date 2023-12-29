@@ -53,6 +53,7 @@ public class InterestChecking extends NoServiceChargeChecking {
 	/**
 	 * Add the interest to the account's balance
 	 */
+	@Override
 	public void monthlyManagement() {
 		this.deposit(this.calcInterest());
 	}

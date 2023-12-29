@@ -10,28 +10,19 @@ public abstract class BankAccount {
 	private double balance;
 
 	public BankAccount(String accountNum, String ownerName, String ownerId, double balance) {
-		this.setAccountNum(accountNum);
-		this.setOwnerName(ownerName);
-		this.setOwnerId(ownerId);
-		this.setBalance(balance);
+		this.accountNum = accountNum;
+		this.ownerName = ownerName;
+		this.ownerId = ownerId;
+		this.balance = balance;
 	}
 
-	public abstract void monthlyManagement();
-
-	// ------------------ Getter and Setters ------------------
+	public abstract void monthlyManagement() throws IllegalBalanceException;
 
 	/**
 	 * @return the accountNum
 	 */
 	protected String getAccountNum() {
 		return accountNum;
-	}
-
-	/**
-	 * @param accountNum the accountNum to set
-	 */
-	protected void setAccountNum(String accountNum) {
-		this.accountNum = accountNum;
 	}
 
 	/**
@@ -42,24 +33,10 @@ public abstract class BankAccount {
 	}
 
 	/**
-	 * @param ownerName the ownerName to set
-	 */
-	protected void setOwnerName(String ownerName) {
-		this.ownerName = ownerName;
-	}
-
-	/**
 	 * @return the ownerId
 	 */
 	protected String getOwnerId() {
 		return ownerId;
-	}
-
-	/**
-	 * @param ownerId the ownerId to set
-	 */
-	protected void setOwnerId(String ownerId) {
-		this.ownerId = ownerId;
 	}
 
 	/**
@@ -68,15 +45,6 @@ public abstract class BankAccount {
 	protected double getBalance() {
 		return balance;
 	}
-
-	/**
-	 * @param balance the balance to set
-	 */
-	protected void setBalance(double balance) {
-		this.balance = balance;
-	}
-
-	// ------------------ Action Methods ------------------
 
 	/**
 	 * @param value to add to current balance
