@@ -5,18 +5,9 @@ package question2;
  */
 public class ServiceChargeChecking extends CheckingAccount {
 
-    private final double DEFAULT_MONTHLY_FEE = 10;
+    private static final double DEFAULT_MONTHLY_FEE = 10;
 
     private double monthlyFee;
-
-    /**
-     * Create a bank account that requires a monthly fee. The monthly fee is set as
-     * default
-     */
-    public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance) {
-        super(accountNum, ownerName, ownerId, balance);
-        this.setMonthlyFee(DEFAULT_MONTHLY_FEE);
-    }
 
     /**
      * Create a bank account that requires a monthly fee.
@@ -27,6 +18,14 @@ public class ServiceChargeChecking extends CheckingAccount {
             double monthlyFee) {
         super(accountNum, ownerName, ownerId, balance);
         this.setMonthlyFee(monthlyFee);
+    }
+
+    /**
+     * Create a bank account that requires a monthly fee. The monthly fee is set as
+     * default
+     */
+    public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance) {
+        this(accountNum, ownerName, ownerId, balance, DEFAULT_MONTHLY_FEE);
     }
 
     /**

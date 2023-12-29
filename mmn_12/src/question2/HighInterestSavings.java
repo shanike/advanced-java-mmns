@@ -1,30 +1,32 @@
 package question2;
 
 /**
- * A bank account that doesn't require a monthly fee, but has a minimum balance.
+ * A savings bank account, with a minimum balance and a high interest.
  */
-public class NoServiceChargeChecking extends CheckingAccount {
+public class HighInterestSavings extends SavingsAccount {
 
-    protected static final double DEFAULT_MINIMUM_BALANCE = 50;
+    private static final double INTEREST_RATE = SavingsAccount.DEFAULT_INTEREST_RATE + 0.05;
+
+    private static final double DEFAULT_MINIMUM_BALANCE = 50;
 
     private double minimumBalance;
 
     /**
-     * Create a no service charge checking bank account
+     * Create a high interest savings bank account. the interest rate is set to the
+     * default higher interest rate
      * 
      * @param minimumBalance to set the minimum balance
      */
-    public NoServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance,
+    public HighInterestSavings(String accountNum, String ownerName, String ownerId, double balance,
             double minimumBalance) {
-        super(accountNum, ownerName, ownerId, balance);
+        super(accountNum, ownerName, ownerId, balance, INTEREST_RATE);
         this.setMinimumBalance(minimumBalance);
     }
 
     /**
-     * Create a no service charge checking bank account with the default minimum
-     * balance
+     * Create a high interest savings bank account with the default minimum balance
      */
-    public NoServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance) {
+    public HighInterestSavings(String accountNum, String ownerName, String ownerId, double balance) {
         this(accountNum, ownerName, ownerId, balance, DEFAULT_MINIMUM_BALANCE);
     }
 
@@ -42,13 +44,8 @@ public class NoServiceChargeChecking extends CheckingAccount {
         this.minimumBalance = minimumBalance;
     }
 
-    public void monthlyManagement() {
-        // No charging...
-    }
-
     /**
-     * Makes sure the minimum balance isn't passed, then invokes the withdrawal
-     * method
+     * Makes sure the minimum balance isn't passed, then invokes the withdrawal method
      */
     @Override
     public void withdrawal(double value) throws IllegalBalanceException {
@@ -58,17 +55,18 @@ public class NoServiceChargeChecking extends CheckingAccount {
         }
         super.withdrawal(value);
     }
-
+    
     public String toString() {
         return super.toString() + "\nMinimum Balance: " + this.minimumBalance;
     }
 
     public boolean equals(Object obj) {
-        if (!(obj instanceof NoServiceChargeChecking)) {
+        if (!(obj instanceof HighInterestSavings)) {
             return false;
         }
-        NoServiceChargeChecking otherNoServiceChargeChecking = (NoServiceChargeChecking) obj;
+        HighInterestSavings otherHighInterestSavings = (HighInterestSavings) obj;
         return super.equals(obj)
-                && this.minimumBalance == otherNoServiceChargeChecking.minimumBalance;
+                && this.minimumBalance == otherHighInterestSavings.minimumBalance;
     }
+
 }

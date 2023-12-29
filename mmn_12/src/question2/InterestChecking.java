@@ -6,26 +6,27 @@ package question2;
  */
 public class InterestChecking extends NoServiceChargeChecking {
 
-    private final double DEFAULT_INTEREST_RATE = 0.05;
-    
+    private static final double MINIMUM_BALANCE = NoServiceChargeChecking.DEFAULT_MINIMUM_BALANCE + 10;
+
+    private static final double DEFAULT_INTEREST_RATE = 0.05;
+
     private double interestRate;
+
+    /**
+     * Create an account with interest rate.
+     * 
+     * @param interestRate set the interest rate
+     */
+    public InterestChecking(String accountNum, String ownerName, String ownerId, double balance, double interestRate) {
+        super(accountNum, ownerName, ownerId, balance, MINIMUM_BALANCE);
+        this.setInterestRate(interestRate);
+    }
 
     /**
      * Create an account with interest rate. The interest rate is set to the default
      */
     public InterestChecking(String accountNum, String ownerName, String ownerId, double balance) {
-        super(accountNum, ownerName, ownerId, balance);
-        this.setMinimumBalance(this.getDefaultMinimumBalance() + 10);
-        this.setInterestRate(DEFAULT_INTEREST_RATE);
-    }
-
-    /**
-     * Create an account with interest rate.
-     * @param interestRate set the interest rate
-     */
-    public InterestChecking(String accountNum, String ownerName, String ownerId, double balance, double interestRate) {
-        this(accountNum, ownerName, ownerId, balance);
-        this.setInterestRate(interestRate);
+        this(accountNum, ownerName, ownerId, balance, DEFAULT_INTEREST_RATE);
     }
 
     /**
@@ -53,9 +54,8 @@ public class InterestChecking extends NoServiceChargeChecking {
      * Add the interest to the account's balance
      */
     public void monthlyManagement() {
-        this.setBalance(this.calcInterest());
+        this.deposit(this.calcInterest());
     }
-
 
     public String toString() {
         return super.toString() + "\nInterest Rate: " + this.interestRate;
