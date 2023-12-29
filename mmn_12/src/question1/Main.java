@@ -74,7 +74,8 @@ public class Main {
 
         while (true) {
             // Get coefficient (till a valid double or an "Enter")
-            System.out.println("Enter a coefficient (Press \"Enter\" to continue):");
+            System.out.println("Enter a coefficient:");
+            System.out.println("(Press \"Enter\" to continue)");
             userInput = scanner.nextLine();
 
             if (userInput.length() == 0) {
@@ -139,23 +140,30 @@ public class Main {
         switch (operation) {
             case OPERATION_PLUS:
                 Polynom sum = pol1.plus(pol2);
-                System.out.println("SUM: " + sum);
+                System.out.println("> PLUS:");
+                System.out.println(pol1 + " + " + pol2 + " = " + sum);
                 break;
             case OPERATION_MINUS:
                 Polynom difference = pol1.minus(pol2);
-                System.out.println("DIFFERENCE: " + difference);
+                System.out.println("> MINUS:");
+                System.out.println(pol1 + " - " + pol2 + " = " + difference);
                 break;
             case OPERATION_DERIVE:
-                System.out.println("First Polynom derivative: " + pol1.derive());
-                System.out.println("Second Polynom derivative: " + pol2.derive());
+                System.out.println("> DERIVE First Polynom:");
+                System.out.println("(" + pol1 + ")' = " + pol1.derive());
+                System.out.println("> DERIVE Second Polynom:");
+                System.out.println("(" + pol2 + ")' = " + pol2.derive());
                 break;
             case OPERATION_TO_STRING:
-                System.out.println("First Polynom: " + pol1.toString());
-                System.out.println("Second Polynom: " + pol2.toString());
+                System.out.println("> TO_STRING First Polynom:");
+                System.out.println(pol1.toString());
+                System.out.println("> TO_STRING Second Polynom:");
+                System.out.println(pol2.toString());
                 break;
             case OPERATION_EQUALS:
                 boolean equals = pol1.equals(pol2);
-                System.out.println(generateEqualsMessage(equals));
+                System.out.println("> EQUALS:");
+                System.out.println(generateEqualsMessage(pol1, pol2, equals));
                 break;
             default:
                 break;
@@ -163,16 +171,24 @@ public class Main {
     }
 
     /**
-     * @return a generated message for whether items are equal or not.
+     * @return a generated message for whether polynoms are equal or not.
      */
-    private static String generateEqualsMessage(boolean equals) {
-        ArrayList<String> msg = new ArrayList<String>();
-        msg.add("The polynoms");
+    private static String generateEqualsMessage(Polynom pol1, Polynom pol2, boolean equals) {
+        String msg1 = pol1.toString() + " ";
         if (!equals) {
-            msg.add("DON'T");
+            msg1 += "!";
+        } else {
+            msg1 += "=";
         }
-        msg.add("equal");
-        return String.join(" ", msg);
+        msg1 += "= " + pol2.toString();
+
+        ArrayList<String> msg2 = new ArrayList<String>();
+        msg2.add("The polynoms");
+        if (!equals) {
+            msg2.add("DON'T");
+        }
+        msg2.add("equal");
+        return msg1 + "\n" + String.join(" ", msg2);
     }
 
     /**
