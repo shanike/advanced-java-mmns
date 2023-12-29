@@ -91,10 +91,10 @@ public class Main {
             }
 
             // Get exponent (till a valid int)
-            System.out.println("Enter an exponent:");
-            userInput = scanner.nextLine();
             while (true) {
                 try {
+                    System.out.println("Enter an exponent:");
+                    userInput = scanner.nextLine();
                     int exponent = Integer.parseInt(userInput);
                     exponents.add(exponent);
                     break;
