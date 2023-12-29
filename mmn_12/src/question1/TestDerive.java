@@ -27,7 +27,7 @@ public class TestDerive {
         ArrayList<Polynom> test = new ArrayList<Polynom>(3);
         try {
             test.add(new Polynom(new double[] { 1, 1, 1 }, new int[] { 1, 3, 0 }));
-            test.add(new Polynom(new double[] { 1, 2 }, new int[] { 0, 2 }));
+            test.add(new Polynom(new double[] { 1, 3 }, new int[] { 0, 2 }));
         } catch (Exception e) {
             throw new Exception("ERROR creating test1: " + e);
         }
