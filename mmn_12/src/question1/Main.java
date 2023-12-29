@@ -20,6 +20,11 @@ public class Main {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        startTwoPolynomOperations();
+    }
+
+    private static void startTwoPolynomOperations() {
+        // Get two polynoms
         Polynom pol1, pol2;
         try {
             // Get pol1
@@ -36,6 +41,7 @@ public class Main {
             return;
         }
 
+        // Run polynom(s) operations by user selection till the user selects to exit
         while (true) {
             // Prompt with operations menu
             System.out.println();
