@@ -37,6 +37,10 @@ public class Polynom {
         for (int i = 0; i < polynomLength; i++) {
             double coefficient = coefficients[i];
             int exponent = exponents[i];
+            if (coefficient == 0) {
+                // If coefficient is 0 then the exponent's value doesn't matter
+                exponent = 0;
+            }
             Monom monom = new Monom(coefficient, exponent);
             polynom.addMonomToPolynom(monom);
         }
