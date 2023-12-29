@@ -12,6 +12,9 @@ public class Polynom {
     /**
      * Creates a new Polynom instance.
      * 
+     * If exponents have duplicate values: will add the coefficients to a single
+     * exponent
+     * 
      * @param coefficients
      * @param exponents
      * @throws Exception if coefficient or exponents array are invalid:
@@ -29,16 +32,16 @@ public class Polynom {
             }
         }
 
-        ArrayList<Monom> polynom = new ArrayList<Monom>();
+        Polynom polynom = new Polynom();
         int polynomLength = coefficients.length;
         for (int i = 0; i < polynomLength; i++) {
             double coefficient = coefficients[i];
             int exponent = exponents[i];
             Monom monom = new Monom(coefficient, exponent);
-            polynom.add(monom);
+            polynom.addMonomToPolynom(monom);
         }
-        Collections.sort(polynom);
-        this.monoms = polynom;
+        Collections.sort(polynom.monoms);
+        this.monoms = polynom.monoms;
     }
 
     /**
