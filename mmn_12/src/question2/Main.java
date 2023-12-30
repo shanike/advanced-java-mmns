@@ -26,7 +26,7 @@ public class Main {
 			System.out.println();
 			double randomWithdrawal = Math.random() * bankAccount.getBalance();
 			try {
-				System.out.println("withdrawal " + randomWithdrawal + " from " + bankAccount.getAccountNum());
+				System.out.println("> withdrawal " + randomWithdrawal + " from " + bankAccount.getAccountNum());
 				bankAccount.withdrawal(randomWithdrawal);
 			} catch (IllegalBalanceException e) {
 				System.out.println("ERROR to withdrawal, balance is not high enough to withdrawal " + randomWithdrawal);
@@ -35,15 +35,35 @@ public class Main {
 
 		printAccounts(accounts);
 
+		System.out.println();
+		for (BankAccount bankAccount : accounts) {
+			if (!(bankAccount instanceof CheckingAccount)) {
+				continue;
+			}
+			CheckingAccount checkingAccount = (CheckingAccount) bankAccount;
+			double randomCheck = Math.random() * checkingAccount.getBalance();
+			try {
+				System.out.println();
+				System.out.println("> writing a check of " + randomCheck + " from " + checkingAccount.getAccountNum());
+				checkingAccount.writeCheck(randomCheck);
+			} catch (IllegalBalanceException e) {
+				System.out.println("ERROR writing a check, balance is not high enough to write a check of " + randomCheck);
+			}
+		}
+
+		System.out.println();
 		for (BankAccount bankAccount : accounts) {
 			try {
-				System.out.println("withdrawing monthly management from " + bankAccount.getAccountNum());
+				System.out.println();
+				System.out.println("> withdrawing monthly management from " + bankAccount.getAccountNum());
 				bankAccount.monthlyManagement();
 			} catch (IllegalBalanceException e) {
 				System.out.println(
 						"ERROR withdrawing monthly management, balance is not high enough to manage");
 			}
 		}
+
+		printAccounts(accounts);
 	}
 
 	public static void printAccounts(BankAccount[] accounts) {
