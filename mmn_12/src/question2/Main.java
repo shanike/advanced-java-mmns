@@ -47,7 +47,8 @@ public class Main {
 				System.out.println("> writing a check of " + randomCheck + " from " + checkingAccount.getAccountNum());
 				checkingAccount.writeCheck(randomCheck);
 			} catch (IllegalBalanceException e) {
-				System.out.println("ERROR writing a check, balance is not high enough to write a check of " + randomCheck);
+				System.out.println(
+						"ERROR writing a check, balance is not high enough to write a check of " + randomCheck);
 			}
 		}
 
@@ -58,8 +59,7 @@ public class Main {
 				System.out.println("> withdrawing monthly management from " + bankAccount.getAccountNum());
 				bankAccount.monthlyManagement();
 			} catch (IllegalBalanceException e) {
-				System.out.println(
-						"ERROR withdrawing monthly management, balance is not high enough to manage");
+				System.out.println("ERROR withdrawing monthly management, balance is not high enough to manage");
 			}
 		}
 

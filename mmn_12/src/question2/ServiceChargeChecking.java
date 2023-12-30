@@ -13,20 +13,20 @@ public class ServiceChargeChecking extends CheckingAccount {
 	 * Create a bank account that requires a monthly fee.
 	 * 
 	 * @param monthlyFee set the monthly fee
-	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalBalanceException    if balance is under zero.
 	 * @throws IllegalMonthlyFeeException if monthly fee is under zero.
 	 */
-	public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance,
-			double monthlyFee) throws IllegalBalanceException, IllegalMonthlyFeeException {
+	public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance, double monthlyFee)
+			throws IllegalBalanceException, IllegalMonthlyFeeException {
 		super(accountNum, ownerName, ownerId, balance);
 		setMonthlyFee(monthlyFee);
 	}
 
 	/**
-	 * Create a bank account that requires a monthly fee. 
-	 * The monthly fee is set to default
+	 * Create a bank account that requires a monthly fee. The monthly fee is set to
+	 * default
 	 * 
-	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalBalanceException    if balance is under zero.
 	 * @throws IllegalMonthlyFeeException if monthly fee is under zero.
 	 */
 	public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance)

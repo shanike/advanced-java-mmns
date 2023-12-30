@@ -2,12 +2,14 @@ package question2;
 
 public class IllegalMonthlyFeeException extends Exception {
 
-    public IllegalMonthlyFeeException() {
-        super();
-    }
+	private static final long serialVersionUID = 6883422289849745630L;
 
-    public IllegalMonthlyFeeException(String message) {
-        super(message);
-    }
+	public IllegalMonthlyFeeException() {
+		super();
+	}
+
+	public IllegalMonthlyFeeException(String message) {
+		super(message);
+	}
 
 }

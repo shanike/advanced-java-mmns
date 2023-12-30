@@ -2,11 +2,13 @@ package question2;
 
 public class IllegalInterestRateException extends Exception {
 
-    public IllegalInterestRateException() {
-        super();
-    }
+	private static final long serialVersionUID = 8400012268668268752L;
 
-    public IllegalInterestRateException(String message) {
-        super(message);
-    }
+	public IllegalInterestRateException() {
+		super();
+	}
+
+	public IllegalInterestRateException(String message) {
+		super(message);
+	}
 }

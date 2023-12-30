@@ -25,8 +25,7 @@ public abstract class BankAccount {
 	private double balance;
 
 	/**
-	 * Create a bank account.
-	 * - Reminder: this is an abstract class
+	 * Create a bank account. - Reminder: this is an abstract class
 	 * 
 	 * @throws IllegalBalanceException if balance is under zero
 	 */
@@ -104,10 +103,8 @@ public abstract class BankAccount {
 	}
 
 	public String toString() {
-		return ("Account Number: " + this.accountNum) +
-				("\nOwner Name: " + this.ownerName) +
-				("\nOwner Id: " + this.ownerId) +
-				("\nBalance: " + this.balance);
+		return ("Account Number: " + this.accountNum) + ("\nOwner Name: " + this.ownerName)
+				+ ("\nOwner Id: " + this.ownerId) + ("\nBalance: " + this.balance);
 	}
 
 	public boolean equals(Object obj) {
@@ -115,8 +112,7 @@ public abstract class BankAccount {
 			return false;
 		}
 		BankAccount otherBankAccount = (BankAccount) obj;
-		return this.accountNum == otherBankAccount.accountNum
-				&& this.ownerName == otherBankAccount.ownerName
+		return this.accountNum == otherBankAccount.accountNum && this.ownerName == otherBankAccount.ownerName
 				&& this.ownerId == otherBankAccount.ownerId;
 	}
 }

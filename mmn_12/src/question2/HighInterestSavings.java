@@ -18,41 +18,46 @@ public class HighInterestSavings extends SavingsAccount {
 	 * @param minimumBalance     to set the minimum balance.
 	 * @param higherInterestRate set the interest rate - higher than the basic
 	 *                           savings account's.
-	 * @throws IllegalBalanceException if balance is under zero.
-	 * @throws IllegalInterestRateException if interest rate is under zero, or not high enough.
+	 * @throws IllegalBalanceException      if balance is under zero.
+	 * @throws IllegalInterestRateException if interest rate is under zero, or not
+	 *                                      high enough.
 	 */
 	public HighInterestSavings(String accountNum, String ownerName, String ownerId, double balance,
-			double minimumBalance, double higherInterestRate) throws IllegalBalanceException, IllegalInterestRateException {
+			double minimumBalance, double higherInterestRate)
+			throws IllegalBalanceException, IllegalInterestRateException {
 		super(accountNum, ownerName, ownerId, balance);
 		setInterestRate(higherInterestRate);
 		setMinimumBalance(minimumBalance);
 	}
 
 	/**
-	 * Create a high interest savings bank account.
-	 * Set either the minimum balance XOR the interest rate.
+	 * Create a high interest savings bank account. Set either the minimum balance
+	 * XOR the interest rate.
 	 * 
 	 * @param isMinimumBalance             declare whether you're setting the
 	 *                                     interest rate or the minimum balance.
 	 * @param minimumBalanceOrInterestRate depending on {@code isMinimumRate}, this
 	 *                                     param is either the interest rate or the
 	 *                                     minimum balance.
-	 * @throws IllegalBalanceException if balance is under zero.
-	 * @throws IllegalInterestRateException if interest rate is under zero, or not high enough.
+	 * @throws IllegalBalanceException      if balance is under zero.
+	 * @throws IllegalInterestRateException if interest rate is under zero, or not
+	 *                                      high enough.
 	 */
 	public HighInterestSavings(String accountNum, String ownerName, String ownerId, double balance,
-			boolean isMinimumBalance, double minimumBalanceOrInterestRate) throws IllegalBalanceException, IllegalInterestRateException {
+			boolean isMinimumBalance, double minimumBalanceOrInterestRate)
+			throws IllegalBalanceException, IllegalInterestRateException {
 		this(accountNum, ownerName, ownerId, balance,
 				isMinimumBalance ? minimumBalanceOrInterestRate : DEFAULT_MINIMUM_BALANCE,
 				!isMinimumBalance ? minimumBalanceOrInterestRate : HIGHER_INTEREST_RATE);
 	}
 
 	/**
-	 * Create a high interest savings bank account.
-	 * Both minimum balance and interest rate are set to default.
+	 * Create a high interest savings bank account. Both minimum balance and
+	 * interest rate are set to default.
 	 * 
-	 * @throws IllegalBalanceException if balance is under zero.
-	 * @throws IllegalInterestRateException if interest rate is under zero, or not high enough.
+	 * @throws IllegalBalanceException      if balance is under zero.
+	 * @throws IllegalInterestRateException if interest rate is under zero, or not
+	 *                                      high enough.
 	 */
 	public HighInterestSavings(String accountNum, String ownerName, String ownerId, double balance)
 			throws IllegalBalanceException, IllegalInterestRateException {

@@ -13,7 +13,7 @@ public class SavingsAccount extends BankAccount {
 	 * Create a savings account.
 	 * 
 	 * @param interestRate set the interest rate.
-	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalBalanceException      if balance is under zero.
 	 * @throws IllegalInterestRateException if interest rate is under zero.
 	 */
 	public SavingsAccount(String accountNum, String ownerName, String ownerId, double balance, double interestRate)
@@ -25,7 +25,7 @@ public class SavingsAccount extends BankAccount {
 	/**
 	 * Create a savings account. The interest rate is set to default.
 	 * 
-	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalBalanceException      if balance is under zero.
 	 * @throws IllegalInterestRateException if interest rate is under zero.
 	 */
 	public SavingsAccount(String accountNum, String ownerName, String ownerId, double balance)

@@ -1,9 +1,8 @@
 package question2;
 
 /**
- * A bank account with an interest rate.
- * With no monthly fee and with a minimum balance (i.e extends
- * NoServiceChargeChecking)
+ * A bank account with an interest rate. With no monthly fee and with a minimum
+ * balance (i.e extends NoServiceChargeChecking)
  */
 public class InterestChecking extends NoServiceChargeChecking {
 
@@ -37,8 +36,8 @@ public class InterestChecking extends NoServiceChargeChecking {
 	/**
 	 * Create an account with interest rate.
 	 * 
-	 * Set either the interest rate, or the minimum balance.
-	 * The other will be set to default.
+	 * Set either the interest rate, or the minimum balance. The other will be set
+	 * to default.
 	 * 
 	 * @param isMinimumBalance             declare whether you're setting the
 	 *                                     interest rate or the minimum balance.
@@ -49,8 +48,7 @@ public class InterestChecking extends NoServiceChargeChecking {
 	 * @throws IllegalInterestRateException if interest rate is under zero.
 	 */
 	public InterestChecking(String accountNum, String ownerName, String ownerId, double balance,
-			boolean isMinimumBalance,
-			double interestRateOrMinimumBalance)
+			boolean isMinimumBalance, double interestRateOrMinimumBalance)
 			throws IllegalBalanceException, IllegalInterestRateException {
 		this(accountNum, ownerName, ownerId, balance,
 				isMinimumBalance ? interestRateOrMinimumBalance : DEFAULT_MINIMUM_BALANCE,
@@ -58,8 +56,8 @@ public class InterestChecking extends NoServiceChargeChecking {
 	}
 
 	/**
-	 * Create an account with interest rate.
-	 * The interest rate and the minimum balance are both set to default.
+	 * Create an account with interest rate. The interest rate and the minimum
+	 * balance are both set to default.
 	 * 
 	 * @throws IllegalBalanceException      if minimum balance is under zero.
 	 * @throws IllegalInterestRateException if interest rate is under zero.
