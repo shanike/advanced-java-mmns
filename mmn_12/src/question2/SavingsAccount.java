@@ -13,16 +13,23 @@ public class SavingsAccount extends BankAccount {
 	 * Create a savings account.
 	 * 
 	 * @param interestRate set the interest rate.
+	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalInterestRateException if interest rate is under zero.
 	 */
-	public SavingsAccount(String accountNum, String ownerName, String ownerId, double balance, double interestRate) {
+	public SavingsAccount(String accountNum, String ownerName, String ownerId, double balance, double interestRate)
+			throws IllegalInterestRateException, IllegalBalanceException {
 		super(accountNum, ownerName, ownerId, balance);
-		this.setInterestRate(interestRate);
+		setInterestRate(interestRate);
 	}
 
 	/**
 	 * Create a savings account. The interest rate is set to default.
+	 * 
+	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalInterestRateException if interest rate is under zero.
 	 */
-	public SavingsAccount(String accountNum, String ownerName, String ownerId, double balance) {
+	public SavingsAccount(String accountNum, String ownerName, String ownerId, double balance)
+			throws IllegalBalanceException, IllegalInterestRateException {
 		this(accountNum, ownerName, ownerId, balance, DEFAULT_INTEREST_RATE);
 	}
 
@@ -35,29 +42,36 @@ public class SavingsAccount extends BankAccount {
 
 	/**
 	 * @param interestRate the interestRate to set
+	 * @throws IllegalInterestRateException if interest rate is under zero.
 	 */
-	public void setInterestRate(double interestRate) {
+	public void setInterestRate(double interestRate) throws IllegalInterestRateException {
+		if (interestRate < 0) {
+			throw new IllegalInterestRateException(ERROR_UNDER_ZERO);
+		}
 		this.interestRate = interestRate;
 	}
 
 	/**
 	 * @return the interest value
 	 */
-	public double calcInterest() {
-		return this.interestRate * this.getBalance();
+	public double calculateInterest() {
+		return this.interestRate * getBalance();
 	}
 
 	/**
-	 * Add the interest to the savings-account's balance
+	 * The monthly management adds the interest to the account's balance.
 	 */
+	@Override
 	public void monthlyManagement() {
-		this.deposit(this.calcInterest());
+		deposit(calculateInterest());
 	}
 
+	@Override
 	public String toString() {
 		return super.toString() + "\nInterest Rate: " + this.interestRate;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof SavingsAccount)) {
 			return false;

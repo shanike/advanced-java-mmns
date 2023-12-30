@@ -5,6 +5,8 @@ package question2;
  */
 public class NoServiceChargeChecking extends CheckingAccount {
 
+	protected final static String ERROR_UNDER_MINIMUM = "Cannot be under minimum";
+
 	protected static final double DEFAULT_MINIMUM_BALANCE = 50;
 
 	private double minimumBalance;
@@ -13,18 +15,23 @@ public class NoServiceChargeChecking extends CheckingAccount {
 	 * Create a no service charge checking bank account
 	 * 
 	 * @param minimumBalance to set the minimum balance
+	 * 
+	 * @throws IllegalBalanceException if balance or minimum balance is below zero.
 	 */
 	public NoServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance,
-			double minimumBalance) {
+			double minimumBalance) throws IllegalBalanceException {
 		super(accountNum, ownerName, ownerId, balance);
-		this.setMinimumBalance(minimumBalance);
+		setMinimumBalance(minimumBalance);
 	}
 
 	/**
 	 * Create a no service charge checking bank account with the default minimum
 	 * balance
+	 * 
+	 * @throws IllegalBalanceException if balance or minimum balance is below zero.
 	 */
-	public NoServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance) {
+	public NoServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance)
+			throws IllegalBalanceException {
 		this(accountNum, ownerName, ownerId, balance, DEFAULT_MINIMUM_BALANCE);
 	}
 
@@ -37,8 +44,12 @@ public class NoServiceChargeChecking extends CheckingAccount {
 
 	/**
 	 * @param minimumBalance the minimumBalance to set
+	 * @throws IllegalBalanceException if minimum balance
 	 */
-	public void setMinimumBalance(double minimumBalance) {
+	public void setMinimumBalance(double minimumBalance) throws IllegalBalanceException {
+		if (minimumBalance < 0) {
+			throw new IllegalBalanceException(ERROR_UNDER_ZERO);
+		}
 		this.minimumBalance = minimumBalance;
 	}
 
@@ -47,14 +58,17 @@ public class NoServiceChargeChecking extends CheckingAccount {
 	}
 
 	/**
-	 * Makes sure the minimum balance isn't passed, then invokes the withdrawal
-	 * method
+	 * Makes sure the minimum balance isn't passed, then invokes the
+	 * {@code withdrawal} method
+	 * 
+	 * @throws IllegalBalanceException if the withdrawal value would bring the back
+	 *                                 account's balance under the minimum balance
 	 */
 	@Override
 	public void withdrawal(double value) throws IllegalBalanceException {
-		double balanceToBe = this.getBalance() - value;
+		double balanceToBe = getBalance() - value;
 		if (balanceToBe < this.minimumBalance) {
-			throw new IllegalBalanceException();
+			throw new IllegalBalanceException(ERROR_UNDER_MINIMUM);
 		}
 		super.withdrawal(value);
 	}

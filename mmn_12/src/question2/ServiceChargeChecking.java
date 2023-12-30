@@ -13,18 +13,24 @@ public class ServiceChargeChecking extends CheckingAccount {
 	 * Create a bank account that requires a monthly fee.
 	 * 
 	 * @param monthlyFee set the monthly fee
+	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalMonthlyFeeException if monthly fee is under zero.
 	 */
 	public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance,
-			double monthlyFee) {
+			double monthlyFee) throws IllegalBalanceException, IllegalMonthlyFeeException {
 		super(accountNum, ownerName, ownerId, balance);
-		this.setMonthlyFee(monthlyFee);
+		setMonthlyFee(monthlyFee);
 	}
 
 	/**
-	 * Create a bank account that requires a monthly fee. The monthly fee is set as
-	 * default
+	 * Create a bank account that requires a monthly fee. 
+	 * The monthly fee is set to default
+	 * 
+	 * @throws IllegalBalanceException if balance is under zero.
+	 * @throws IllegalMonthlyFeeException if monthly fee is under zero.
 	 */
-	public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance) {
+	public ServiceChargeChecking(String accountNum, String ownerName, String ownerId, double balance)
+			throws IllegalBalanceException, IllegalMonthlyFeeException {
 		this(accountNum, ownerName, ownerId, balance, DEFAULT_MONTHLY_FEE);
 	}
 
@@ -37,23 +43,31 @@ public class ServiceChargeChecking extends CheckingAccount {
 
 	/**
 	 * @param monthlyFee the monthlyFee to set
+	 * @throws IllegalMonthlyFeeException if monthly fee is less than zero.
 	 */
-	public void setMonthlyFee(double monthlyFee) {
+	public void setMonthlyFee(double monthlyFee) throws IllegalMonthlyFeeException {
+		if (monthlyFee < 0) {
+			throw new IllegalMonthlyFeeException(ERROR_UNDER_ZERO);
+		}
+
 		this.monthlyFee = monthlyFee;
 	}
 
 	/**
-	 * The monthly management charges the monthly fee
-	 * @throws IllegalBalanceException 
+	 * The monthly management charges the monthly fee.
+	 * 
+	 * @throws IllegalBalanceException
 	 */
 	public void monthlyManagement() throws IllegalBalanceException {
 		this.withdrawal(this.monthlyFee);
 	}
 
+	@Override
 	public String toString() {
 		return super.toString() + "\nMonthly Fee: " + this.monthlyFee;
 	}
 
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof ServiceChargeChecking)) {
 			return false;

@@ -4,16 +4,38 @@ package question2;
  * An abstract bank account
  */
 public abstract class BankAccount {
+
+	protected final static String ERROR_UNDER_ZERO = "Cannot be under 0";
+
+	/**
+	 * Bank account's number
+	 */
 	private String accountNum;
+
+	/**
+	 * Name of the bank account's owner
+	 */
 	private String ownerName;
+
+	/**
+	 * Identity number of the bank account's owner
+	 */
 	private String ownerId;
+
 	private double balance;
 
-	public BankAccount(String accountNum, String ownerName, String ownerId, double balance) {
+	/**
+	 * Create a bank account.
+	 * - Reminder: this is an abstract class
+	 * 
+	 * @throws IllegalBalanceException if balance is under zero
+	 */
+	public BankAccount(String accountNum, String ownerName, String ownerId, double balance)
+			throws IllegalBalanceException {
 		this.accountNum = accountNum;
 		this.ownerName = ownerName;
 		this.ownerId = ownerId;
-		this.balance = balance;
+		setBalance(balance);
 	}
 
 	public abstract void monthlyManagement() throws IllegalBalanceException;
@@ -47,6 +69,19 @@ public abstract class BankAccount {
 	}
 
 	/**
+	 * @param balance the balance to set.
+	 * @throws IllegalBalanceException if balance is less than 0.
+	 */
+	private void setBalance(double balance) throws IllegalBalanceException {
+		if (balance < 0) {
+			throw new IllegalBalanceException(ERROR_UNDER_ZERO);
+		}
+		this.balance = balance;
+	}
+
+	/**
+	 * Add money to the bank account.
+	 * 
 	 * @param value to add to current balance
 	 */
 	public void deposit(double value) {
@@ -54,19 +89,25 @@ public abstract class BankAccount {
 	}
 
 	/**
-	 * @param value to subtract from current balance
-	 * @throws IllegalBalanceException if balance is less than {@code value}
+	 * Take out money from the bank account.
+	 * 
+	 * @param value to subtract from current balance.
+	 * @throws IllegalBalanceException if balance is less than {@code value} (i.e if
+	 *                                 balance would be under zero)
 	 */
 	public void withdrawal(double value) throws IllegalBalanceException {
-		if (value > this.balance) {
-			throw new IllegalBalanceException();
+		double balanceToBe = this.balance - value;
+		if (balanceToBe < 0) {
+			throw new IllegalBalanceException(ERROR_UNDER_ZERO);
 		}
 		this.balance -= value;
 	}
 
 	public String toString() {
-		return "Account Number: " + this.accountNum + "\nOwner Name: " + this.ownerName + "\nOwner Id: " + this.ownerId
-				+ "\nBalance: " + this.balance;
+		return ("Account Number: " + this.accountNum) +
+				("\nOwner Name: " + this.ownerName) +
+				("\nOwner Id: " + this.ownerId) +
+				("\nBalance: " + this.balance);
 	}
 
 	public boolean equals(Object obj) {
@@ -74,7 +115,8 @@ public abstract class BankAccount {
 			return false;
 		}
 		BankAccount otherBankAccount = (BankAccount) obj;
-		return this.accountNum == otherBankAccount.accountNum && this.ownerName == otherBankAccount.ownerName
-				&& this.ownerId == otherBankAccount.ownerId && this.balance == otherBankAccount.balance;
+		return this.accountNum == otherBankAccount.accountNum
+				&& this.ownerName == otherBankAccount.ownerName
+				&& this.ownerId == otherBankAccount.ownerId;
 	}
 }

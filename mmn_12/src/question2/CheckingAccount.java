@@ -7,8 +7,9 @@ public abstract class CheckingAccount extends BankAccount {
 
 	/**
 	 * Create a checking bank account
+	 * @throws IllegalBalanceException if balance is under zero
 	 */
-	public CheckingAccount(String accountNum, String ownerName, String ownerId, double balance) {
+	public CheckingAccount(String accountNum, String ownerName, String ownerId, double balance) throws IllegalBalanceException {
 		super(accountNum, ownerName, ownerId, balance);
 	}
 
