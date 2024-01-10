@@ -1,17 +1,12 @@
 package question2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -19,7 +14,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 
 public class CalculatorController {
 	@FXML
@@ -170,7 +164,12 @@ public class CalculatorController {
 							boolean isPrevPrevAnAction = output.length() >= 2
 									? ACTIONS.indexOf(Character.toString(output.charAt(output.length() - 2))) >= 0
 									: false;
-							if (!willBeFirstCharInOutput && !isPrevPrevAnAction) {
+							if (willBeFirstCharInOutput) {
+								if (btnText.equals(PLUS)) {
+									overrideCharToOutput(btnText);
+								}
+							} else if (!isPrevPrevAnAction) {
+								// Won't be first character && prev prev is not an action character
 								overrideCharToOutput(btnText);
 							}
 						}
@@ -182,13 +181,17 @@ public class CalculatorController {
 					if (!isPrevCharAnAction) {
 						writeCharToOutput(btnText);
 					} else if (prevCharInOutput.equals(PLUS) || prevCharInOutput.equals(MINUS)) {
-
 						overrideCharToOutput(btnText);
 					} else {
 						writeCharToOutput(btnText);
 					}
 				} else if (btnText.equals(DOT)) {
-//					if()
+					if (!isFirstChar) {
+						char prevCharInOutput = output.charAt(output.length() - 1);
+						if (Character.isDigit(prevCharInOutput) && !isLastNonDigitADot()) {
+							writeCharToOutput(btnText);
+						}
+					}
 				} else {
 					writeCharToOutput(btnText);
 				}
@@ -212,8 +215,36 @@ public class CalculatorController {
 		outputLabel.setText(output.toString());
 	}
 
+	private boolean isLastNonDigitADot() {
+		for (int i = output.length() - 1; i >= 0; i--) {
+			char c = output.charAt(i);
+			boolean isNonDigit = !Character.isDigit(c);
+			if (isNonDigit) {
+				return Character.toString(c).equals(DOT);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * TODO
+	 */
 	private void calculateOutput() {
+		System.out.println("TODO: calc output");
 
 	}
+
+//	public static boolean isNumeric(String str) {
+//
+//		if (str == null) {
+//			return false;
+//		}
+//		try {
+//			Double.parseDouble(str);
+//		} catch (NumberFormatException e) {
+//			return false;
+//		}
+//		return true;
+//	}
 
 }
