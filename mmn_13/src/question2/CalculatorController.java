@@ -7,6 +7,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,7 +36,10 @@ public class CalculatorController {
 
 	/* ------------------------- end of FXML attributes ------------------------- */
 
-	private final Insets buttonsPadding = new Insets(10, 15, 10, 15);
+	private static final Insets BUTTONS_PADDING = new Insets(10, 15, 10, 15);
+	private static final double BUTTONS_BORDER_RADIUS = 8;
+	private static final Color OUTPUT_BG_COLOR = Color.rgb(158, 200, 185);
+
 	private static final int OUTPUT_ROW_HEIGHT = 50;
 	private static final int BUTTONS_HEIGHT = OUTPUT_ROW_HEIGHT;
 	private static final int BUTTONS_WIDTH = 70;
@@ -70,50 +74,101 @@ public class CalculatorController {
 
 	public void initialize() {
 		resetOutput();
-		setOutputGridProperties();
+		setOutputGridDimensions();
 		setOutputLabelProperties();
 		updateOutputLabel();
 		setSolveButton();
 		createInputButtons();
 	}
 
-	private void setButtonDimensions(Button btn) {
-		btn.setPrefWidth(BUTTONS_WIDTH);
-		btn.setPrefHeight(BUTTONS_HEIGHT);
-	}
-
-	private void setOutputGridProperties() {
-		outputGrid.setPrefWidth(appGrid.getPrefWidth());
-		outputGrid.setPrefHeight(OUTPUT_ROW_HEIGHT);
-	}
-
 	/**
-	 * Sets the output label UI properties
+	 * Reset output to initial value: an empty {@code StringBuilder}.
 	 */
-	private void setOutputLabelProperties() {
-		outputLabel.setBackground(
-				new Background(new BackgroundFill(Color.rgb(158, 200, 185), new CornerRadii(6), Insets.EMPTY)));
-		int horizontalPadding = 20;
-		outputLabel.setPadding(new Insets(10, horizontalPadding, 10, horizontalPadding));
-
-		outputLabel.setPrefWidth(
-				outputGrid.getPrefWidth() - (2 * BUTTONS_WIDTH) - buttonsPadding.getLeft() - buttonsPadding.getRight());
-		outputLabel.setPrefHeight(outputGrid.getPrefHeight());
-	}
-
 	private void resetOutput() {
 		output = new StringBuilder();
 	}
 
 	/**
-	 * Show an alert to the user with information about whether the answer is
-	 * in/correct
+	 * Sets the width and height of the output grid
 	 */
-	private void showIllegalExpressionAlert() {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Calculator -- Error");
-		alert.setHeaderText("Invalid expression");
-		alert.showAndWait();
+	private void setOutputGridDimensions() {
+		outputGrid.setPrefWidth(appGrid.getPrefWidth());
+		outputGrid.setPrefHeight(OUTPUT_ROW_HEIGHT);
+	}
+
+	/**
+	 * Sets the default width and height to a button
+	 */
+	private void setButtonDimensions(Button btn) {
+		btn.setPrefWidth(BUTTONS_WIDTH);
+		btn.setPrefHeight(BUTTONS_HEIGHT);
+	}
+
+	/**
+	 * Sets the output label UI properties:
+	 */
+	private void setOutputLabelProperties() {
+		// Width & height
+		outputLabel.setPrefWidth(outputGrid.getPrefWidth() - (2 * BUTTONS_WIDTH) - BUTTONS_PADDING.getLeft()
+				- BUTTONS_PADDING.getRight());
+		outputLabel.setPrefHeight(outputGrid.getPrefHeight());
+
+		// Background
+		outputLabel
+				.setBackground(new Background(new BackgroundFill(OUTPUT_BG_COLOR, new CornerRadii(6), Insets.EMPTY)));
+
+		// Padding
+		final int horizontalPadding = 20;
+		outputLabel.setPadding(new Insets(BUTTONS_PADDING.getTop(), horizontalPadding, BUTTONS_PADDING.getBottom(),
+				horizontalPadding));
+
+	}
+
+	/**
+	 * Style a button with button width&height, with button padding, with background
+	 * color and hover effects.
+	 * 
+	 * @param btn     to style
+	 * @param bgColor to apply the button with
+	 */
+	private void styleButton(Button btn, Color bgColor) {
+		// Width & Height
+		setButtonDimensions(btn);
+
+		// Padding
+		btn.setPadding(BUTTONS_PADDING);
+
+		// Background
+		CornerRadii corderRadii = new CornerRadii(BUTTONS_BORDER_RADIUS);
+		Color hoverBgColor = lightenColor(bgColor);
+
+		btn.setBackground(new Background(new BackgroundFill(bgColor, corderRadii, Insets.EMPTY)));
+
+		// Background:hover
+		btn.setOnMouseEntered(
+				e -> btn.setBackground(new Background(new BackgroundFill(hoverBgColor, corderRadii, Insets.EMPTY))));
+		btn.setOnMouseExited(
+				e -> btn.setBackground(new Background(new BackgroundFill(bgColor, corderRadii, Insets.EMPTY))));
+
+		// Cursor
+		btn.setCursor(Cursor.HAND);
+	}
+
+	/**
+	 * @param color background color rgb
+	 * @return A lightened color of {@code bgColor} for being the background color
+	 *         on hover
+	 */
+	private Color lightenColor(Color color) {
+		double red = color.getRed() * 255;
+		double green = color.getGreen() * 255;
+		double blue = color.getBlue() * 255;
+
+		int lightenedRed = (int) Math.min(red + 10, 255);
+		int lightenedGreen = (int) Math.min(green + 10, 255);
+		int lightenedBlue = (int) Math.min(blue + 10, 255);
+
+		return Color.rgb(lightenedRed, lightenedGreen, lightenedBlue);
 	}
 
 	/**
@@ -131,14 +186,18 @@ public class CalculatorController {
 				}
 			}
 		});
-
-		// style
-		outputButton.setBackground(
-				new Background(new BackgroundFill(Color.rgb(158, 200, 185), new CornerRadii(8), Insets.EMPTY)));
-		outputButton.setPadding(buttonsPadding);
-		setButtonDimensions(outputButton);
+		styleButton(outputButton, Color.rgb(158, 200, 185));
 		GridPane.setHalignment(outputButton, HPos.RIGHT);
+	}
 
+	/**
+	 * Alert the user that the expression is invalid
+	 */
+	private void showIllegalExpressionAlert() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Calculator -- Error");
+		alert.setHeaderText("The expression is invalid");
+		alert.showAndWait();
 	}
 
 	private void createInputButtons() {
@@ -146,11 +205,8 @@ public class CalculatorController {
 			for (int j = 0; j < 4; j++) {
 				Button btn = new Button(INPUTS[i][j]);
 				btn.setOnAction(getInputHandler());
-				btn.setPadding(buttonsPadding);
-				btn.setBackground(
-						new Background(new BackgroundFill(Color.rgb(92, 131, 116), new CornerRadii(8), Insets.EMPTY)));
+				styleButton(btn, Color.rgb(92, 131, 116));
 				btn.setTextFill(Color.WHITE);
-				setButtonDimensions(btn);
 				if (j == 0) {
 					GridPane.setHalignment(btn, HPos.LEFT);
 				} else if (j == 1) {
@@ -267,7 +323,7 @@ public class CalculatorController {
 		if (!Character.toString(firstChar).equals(MINUS)) {
 			expression = "+" + expression;
 		}
-		System.out.println(expression);
+
 		double result = 0;
 		char action = expression.charAt(0);
 		String numberStringified = "";
@@ -294,7 +350,7 @@ public class CalculatorController {
 			}
 			if (isAction || isLastChar) {
 				// Found another action -> calculate prev and then set to curr
-				result = calcAction(Character.toString(action), result, Double.parseDouble(numberStringified));
+				result = calculateAction(Character.toString(action), result, Double.parseDouble(numberStringified));
 				action = c;
 				numberStringified = "";
 			} else {
@@ -305,7 +361,7 @@ public class CalculatorController {
 		updateOutputWithResult(result);
 	}
 
-	private double calcAction(String action, double rightNum, double leftNum) {
+	private double calculateAction(String action, double rightNum, double leftNum) {
 		switch (action) {
 		case PLUS:
 			return rightNum + leftNum;
@@ -330,17 +386,4 @@ public class CalculatorController {
 		updateOutputLabel();
 		isOutputShowingResult = true;
 	}
-//	public static boolean isNumeric(String str) {
-//
-//		if (str == null) {
-//			return false;
-//		}
-//		try {
-//			Double.parseDouble(str);
-//		} catch (NumberFormatException e) {
-//			return false;
-//		}
-//		return true;
-//	}
-
 }
