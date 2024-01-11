@@ -44,14 +44,15 @@ public class CalculatorController {
 	private static final int BUTTONS_HEIGHT = OUTPUT_ROW_HEIGHT;
 	private static final int BUTTONS_WIDTH = 70;
 
-//	private static final int INPUTS_PER_ROW = 4;
-//	private static final int INPUT_ROWS = 4;
+	private static final int INPUT_ROWS = 4;
+	private static final int INPUTS_PER_ROW = 4;
 	private static final String MINUS = "-";
 	private static final String PLUS = "+";
 	private static final String TIMES = "*";
 	private static final String DIVIDE = "/";
 	private static final String PLUS_MINUS = "+/-";
 	private static final String DOT = ".";
+	private static final char DOT_CHAR = '.';
 	private static final char ZERO_CHAR = '0';
 
 	private static final ArrayList<String> ACTIONS = new ArrayList<String>() {
@@ -125,6 +126,28 @@ public class CalculatorController {
 	}
 
 	/**
+	 * Create styled input buttons in the {@code inputGrid}
+	 */
+	private void createInputButtons() {
+		for (int i = 0; i < INPUT_ROWS; i++) {
+			for (int j = 0; j < INPUTS_PER_ROW; j++) {
+				Button btn = new Button(INPUTS[i][j]);
+				btn.setOnAction(getInputHandler());
+				styleButton(btn, Color.rgb(92, 131, 116));
+				btn.setTextFill(Color.WHITE);
+				if (j == 0) {
+					GridPane.setHalignment(btn, HPos.LEFT);
+				} else if (j < INPUTS_PER_ROW - 1 - 1) {
+					GridPane.setHalignment(btn, HPos.CENTER);
+				} else {
+					GridPane.setHalignment(btn, HPos.RIGHT);
+				}
+				inputGrid.add(btn, j, i);
+			}
+		}
+	}
+
+	/**
 	 * Style a button with button width&height, with button padding, with background
 	 * color and hover effects.
 	 * 
@@ -155,9 +178,11 @@ public class CalculatorController {
 	}
 
 	/**
-	 * @param color background color rgb
-	 * @return A lightened color of {@code bgColor} for being the background color
-	 *         on hover
+	 * A util function to lighten a color rgb.
+	 * 
+	 * @param color rgb
+	 * @return A lightened color of {@code color}. For being the color on hover for
+	 *         example
 	 */
 	private Color lightenColor(Color color) {
 		double red = color.getRed() * 255;
@@ -172,7 +197,7 @@ public class CalculatorController {
 	}
 
 	/**
-	 * Sets the output (solve) button properties
+	 * Sets the output (=solve) button properties
 	 */
 	private void setSolveButton() {
 		// action
@@ -180,7 +205,7 @@ public class CalculatorController {
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					calculateOutput();
+					calculateExpression(outputLabel.getText());
 				} catch (IllegalArgumentException e) {
 					showIllegalExpressionAlert();
 				}
@@ -200,25 +225,9 @@ public class CalculatorController {
 		alert.showAndWait();
 	}
 
-	private void createInputButtons() {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				Button btn = new Button(INPUTS[i][j]);
-				btn.setOnAction(getInputHandler());
-				styleButton(btn, Color.rgb(92, 131, 116));
-				btn.setTextFill(Color.WHITE);
-				if (j == 0) {
-					GridPane.setHalignment(btn, HPos.LEFT);
-				} else if (j == 1) {
-					GridPane.setHalignment(btn, HPos.CENTER);
-				} else {
-					GridPane.setHalignment(btn, HPos.RIGHT);
-				}
-				inputGrid.add(btn, j, i);
-			}
-		}
-	}
-
+	/**
+	 * @return an event handler to handle validation and changes on any new input
+	 */
 	private EventHandler<ActionEvent> getInputHandler() {
 		return new EventHandler<ActionEvent>() {
 			@Override
@@ -226,129 +235,198 @@ public class CalculatorController {
 				Button btn = (Button) event.getSource();
 				String btnText = btn.getText();
 				if (isOutputShowingResult) {
+					/*
+					 * If current output is a result of some other expression, then overide the
+					 * whole output with current btnText
+					 */
 					resetOutput();
 				}
 				isOutputShowingResult = false;
-				boolean isFirstChar = output.length() <= 0;
-				if (btnText.equals(PLUS_MINUS)) {
-					char firstChar = output.charAt(0);
-					if (Character.toString(firstChar).equals(MINUS)) {
-						output.deleteCharAt(0);
-					} else if (output.charAt(0) != ZERO_CHAR) {
-						output.insert(0, MINUS);
-					}
-				} else if (btnText.equals(TIMES) || btnText.equals(DIVIDE) || btnText.equals(PLUS)) {
-					// If isFirstChar then don't render the btnText.
-					if (isFirstChar) {
-						if (btnText.equals(PLUS)) {
-							writeCharToOutput(btnText);
-						}
-					} else {
-						String prevCharInOutput = Character.toString(output.charAt(output.length() - 1));
-						boolean isPrevCharAnAction = ACTIONS.indexOf(prevCharInOutput) >= 0;
 
-						if (!isPrevCharAnAction) {
-							writeCharToOutput(btnText);
-						} else {
-							// Prev character is an action
-							boolean willBeFirstCharInOutput = output.length() <= 1;
-							boolean isPrevPrevAnAction = output.length() >= 2
-									? ACTIONS.indexOf(Character.toString(output.charAt(output.length() - 2))) >= 0
-									: false;
-							if (willBeFirstCharInOutput) {
-								if (btnText.equals(PLUS)) {
-									overrideCharToOutput(btnText);
-								}
-							} else if (!isPrevPrevAnAction) {
-								// Won't be first character && prev prev is not an action character
-								overrideCharToOutput(btnText);
-							}
-						}
-					}
-				} else if (btnText.equals(MINUS) && !isFirstChar) {
-					// If isFirstChar then render btnText in {@code else}
-					String prevCharInOutput = Character.toString(output.charAt(output.length() - 1));
-					boolean isPrevCharAnAction = ACTIONS.indexOf(prevCharInOutput) >= 0;
-					if (!isPrevCharAnAction) {
-						writeCharToOutput(btnText);
-					} else if (prevCharInOutput.equals(PLUS) || prevCharInOutput.equals(MINUS)) {
-						overrideCharToOutput(btnText);
-					} else {
-						writeCharToOutput(btnText);
-					}
-				} else if (btnText.equals(DOT)) {
-					if (!isFirstChar) {
-						char prevCharInOutput = output.charAt(output.length() - 1);
-						if (Character.isDigit(prevCharInOutput) && !isLastNonDigitADot()) {
-							writeCharToOutput(btnText);
-						}
-					}
-				} else {
+				boolean isFirstChar = output.length() <= 0;
+
+				switch (btnText) {
+				case PLUS_MINUS:
+					handlePlusMinusInput();
+					break;
+
+				case TIMES:
+				case DIVIDE:
+				case PLUS:
+					handleNonMinusActionInput(btnText, isFirstChar);
+					break;
+
+				case MINUS:
+					handleMinusInput(btnText, isFirstChar);
+					break;
+
+				case DOT:
+					handleDotInput(btnText, isFirstChar);
+					break;
+
+				default:
 					writeCharToOutput(btnText);
+					break;
 				}
+
 				updateOutputLabel();
 			}
 		};
 	}
 
+	private void handlePlusMinusInput() {
+		char firstChar = output.charAt(0);
+		if (Character.toString(firstChar).equals(MINUS)) {
+			output.deleteCharAt(0);
+		} else if (output.charAt(0) != ZERO_CHAR) {
+			output.insert(0, MINUS);
+		}
+	}
+
+	private void handleNonMinusActionInput(String btnText, boolean isFirstChar) {
+		// If isFirstChar then don't render the btnText. Unless btnText is a PLUS.
+		if (isFirstChar) {
+			if (btnText.equals(PLUS)) {
+				writeCharToOutput(btnText);
+			}
+		} else {
+			String prevCharInOutput = Character.toString(output.charAt(output.length() - 1));
+			boolean isPrevCharAnAction = ACTIONS.indexOf(prevCharInOutput) >= 0;
+
+			if (!isPrevCharAnAction) {
+				writeCharToOutput(btnText);
+			} else {
+				// Prev character is an action
+				boolean willBeFirstCharInOutput = output.length() <= 1;
+				boolean isPrevPrevAnAction = output.length() >= 2
+						? ACTIONS.indexOf(Character.toString(output.charAt(output.length() - 2))) >= 0
+						: false;
+				if (willBeFirstCharInOutput) {
+					if (btnText.equals(PLUS)) {
+						replacePrevCharInOutput(btnText);
+					}
+				} else if (!isPrevPrevAnAction) {
+					// Won't be first character && prev prev is not an action character
+					replacePrevCharInOutput(btnText);
+				}
+			}
+		}
+	}
+
+	private void handleMinusInput(String btnText, boolean isFirstChar) {
+		if (isFirstChar) {
+			writeCharToOutput(btnText);
+			return;
+		}
+
+		String prevCharInOutput = Character.toString(output.charAt(output.length() - 1));
+		boolean isPrevCharAnAction = ACTIONS.indexOf(prevCharInOutput) >= 0;
+
+		if (!isPrevCharAnAction) {
+			writeCharToOutput(btnText);
+		} else if (prevCharInOutput.equals(PLUS) || prevCharInOutput.equals(MINUS)) {
+			replacePrevCharInOutput(btnText);
+		} else {
+			writeCharToOutput(btnText);
+		}
+	}
+
+	private void handleDotInput(String btnText, boolean isFirstChar) {
+		if (!isFirstChar) {
+			char prevCharInOutput = output.charAt(output.length() - 1);
+			if (Character.isDigit(prevCharInOutput) && !isLastNonDigitADot()) {
+				writeCharToOutput(btnText);
+			}
+		}
+	}
+
+	/**
+	 * Add param {@code s} to output
+	 */
 	private void writeCharToOutput(String s) {
 		output.append(s);
 	}
 
-	private void overrideCharToOutput(String s) {
+	/**
+	 * override the previous char in output with param {@code s}
+	 */
+	private void replacePrevCharInOutput(String s) {
 		if (output.length() > 0) {
 			output.deleteCharAt(output.length() - 1);
 		}
 		output.append(s);
 	}
 
+	/**
+	 * Set output label to show current {@code output}
+	 */
 	private void updateOutputLabel() {
 		outputLabel.setText(output.toString());
 	}
 
+	/**
+	 * @return whether or not last non-digit char in output is a dot
+	 */
 	private boolean isLastNonDigitADot() {
 		for (int i = output.length() - 1; i >= 0; i--) {
 			char c = output.charAt(i);
 			boolean isNonDigit = !Character.isDigit(c);
 			if (isNonDigit) {
-				return Character.toString(c).equals(DOT);
+				char prevNonDigitChar = c; // This is redundant to declare a new {@code char}, but the code documents
+											// itself better this way
+				return Character.toString(prevNonDigitChar).equals(DOT);
 			}
 		}
 		return false;
 	}
 
-	private void calculateOutput() throws IllegalArgumentException {
-		String expression = outputLabel.getText();
+	/**
+	 * Calculate the expression (to a mathmatical result).
+	 * 
+	 * @throws IllegalArgumentException if expression is not valid due to being
+	 *                                  "cut-off"
+	 */
+	private void calculateExpression(String expression) throws IllegalArgumentException {
 		char firstChar = expression.charAt(0);
-		if (!Character.toString(firstChar).equals(MINUS)) {
-			expression = "+" + expression;
+		boolean isFirstCharNumeric = Character.isDigit(firstChar);
+		if (isFirstCharNumeric) {
+			// Set first character to be a PLUS
+			expression = PLUS + expression;
 		}
 
 		double result = 0;
 		char action = expression.charAt(0);
+		/**
+		 * Stringified number to perform the {@code action} with the {@code result} on.
+		 */
 		String numberStringified = "";
 		for (int i = 1; i < expression.length(); i++) {
 			char c = expression.charAt(i);
 			boolean isLastChar = i == expression.length() - 1;
 			boolean isAction = ACTIONS.indexOf(Character.toString(c)) >= 0;
 
-			if (isLastChar) {
-				if (isAction) {
-					throw new IllegalArgumentException("Invalid expression");
-				}
-				numberStringified += c;
+			if (isLastChar && isAction) {
+				throw new IllegalArgumentException("Invalid expression");
 			}
 
-			if (isAction && Character.toString(c).equals(MINUS)) {
-				if (i - 1 >= 0) {
+			boolean isMinus = Character.toString(c).equals(MINUS);
+
+			if (isMinus) {
+				int prevIndex = i - 1;
+				if (prevIndex >= 0) {
 					char prevC = expression.charAt(i - 1);
 					boolean isPrevAnAction = ACTIONS.indexOf(Character.toString(prevC)) >= 0;
 					if (isPrevAnAction) {
+						/*
+						 * If curr char is a MINUS, and prev char is an action, then curr char shouldn't
+						 * perform a subtraction action, but rather negate the {@code numberStringified}
+						 * ==> act as a non-action
+						 */
 						isAction = false;
 					}
 				}
 			}
-			if (isAction || isLastChar) {
+			if (isAction) {
 				// Found another action -> calculate prev and then set to curr
 				result = calculateAction(Character.toString(action), result, Double.parseDouble(numberStringified));
 				action = c;
@@ -357,7 +435,13 @@ public class CalculatorController {
 				// Add digit/dot
 				numberStringified += c;
 			}
+
+			if (isLastChar) {
+				// Calculate last action.
+				result = calculateAction(Character.toString(action), result, Double.parseDouble(numberStringified));
+			}
 		}
+
 		updateOutputWithResult(result);
 	}
 
@@ -377,11 +461,18 @@ public class CalculatorController {
 		}
 	}
 
+	/**
+	 * Format result and display it in outpur label.
+	 */
 	private void updateOutputWithResult(double result) {
 		output = new StringBuilder(Double.toString(result));
-		if (output.length() >= 2 && output.charAt(output.length() - 1) == ZERO_CHAR
-				&& output.charAt(output.length() - 2) == '.') {
-			output.delete(output.length() - 2, output.length());
+		if (output.length() >= 2) {
+			boolean isPrevZero = output.charAt(output.length() - 1) == ZERO_CHAR;
+			boolean isPrevPrevDot = output.charAt(output.length() - 2) == DOT_CHAR;
+			if (isPrevZero && isPrevPrevDot) {
+				// If output is actually an int, then remove the zero and the dot.
+				output.delete(output.length() - 2, output.length());
+			}
 		}
 		updateOutputLabel();
 		isOutputShowingResult = true;
