@@ -7,8 +7,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -62,9 +64,12 @@ public class CalculatorController {
 
 	private StringBuilder output = new StringBuilder();
 
+	private boolean isOutputShowingResult = false;
+
 	/* ------------------------- end of attributes ------------------------- */
 
 	public void initialize() {
+		resetOutput();
 		setOutputGridProperties();
 		setOutputLabelProperties();
 		updateOutputLabel();
@@ -82,6 +87,9 @@ public class CalculatorController {
 		outputGrid.setPrefHeight(OUTPUT_ROW_HEIGHT);
 	}
 
+	/**
+	 * Sets the output label UI properties
+	 */
 	private void setOutputLabelProperties() {
 		outputLabel.setBackground(
 				new Background(new BackgroundFill(Color.rgb(158, 200, 185), new CornerRadii(6), Insets.EMPTY)));
@@ -91,17 +99,40 @@ public class CalculatorController {
 		outputLabel.setPrefWidth(
 				outputGrid.getPrefWidth() - (2 * BUTTONS_WIDTH) - buttonsPadding.getLeft() - buttonsPadding.getRight());
 		outputLabel.setPrefHeight(outputGrid.getPrefHeight());
-
 	}
 
+	private void resetOutput() {
+		output = new StringBuilder();
+	}
+
+	/**
+	 * Show an alert to the user with information about whether the answer is
+	 * in/correct
+	 */
+	private void showIllegalExpressionAlert() {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle("Calculator -- Error");
+		alert.setHeaderText("Invalid expression");
+		alert.showAndWait();
+	}
+
+	/**
+	 * Sets the output (solve) button properties
+	 */
 	private void setSolveButton() {
+		// action
 		outputButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				calculateOutput();
+				try {
+					calculateOutput();
+				} catch (IllegalArgumentException e) {
+					showIllegalExpressionAlert();
+				}
 			}
 		});
 
+		// style
 		outputButton.setBackground(
 				new Background(new BackgroundFill(Color.rgb(158, 200, 185), new CornerRadii(8), Insets.EMPTY)));
 		outputButton.setPadding(buttonsPadding);
@@ -138,6 +169,10 @@ public class CalculatorController {
 			public void handle(ActionEvent event) {
 				Button btn = (Button) event.getSource();
 				String btnText = btn.getText();
+				if (isOutputShowingResult) {
+					resetOutput();
+				}
+				isOutputShowingResult = false;
 				boolean isFirstChar = output.length() <= 0;
 				if (btnText.equals(PLUS_MINUS)) {
 					char firstChar = output.charAt(0);
@@ -226,14 +261,75 @@ public class CalculatorController {
 		return false;
 	}
 
-	/**
-	 * TODO
-	 */
-	private void calculateOutput() {
-		System.out.println("TODO: calc output");
+	private void calculateOutput() throws IllegalArgumentException {
+		String expression = outputLabel.getText();
+		char firstChar = expression.charAt(0);
+		if (!Character.toString(firstChar).equals(MINUS)) {
+			expression = "+" + expression;
+		}
+		System.out.println(expression);
+		double result = 0;
+		char action = expression.charAt(0);
+		String numberStringified = "";
+		for (int i = 1; i < expression.length(); i++) {
+			char c = expression.charAt(i);
+			boolean isLastChar = i == expression.length() - 1;
+			boolean isAction = ACTIONS.indexOf(Character.toString(c)) >= 0;
 
+			if (isLastChar) {
+				if (isAction) {
+					throw new IllegalArgumentException("Invalid expression");
+				}
+				numberStringified += c;
+			}
+
+			if (isAction && Character.toString(c).equals(MINUS)) {
+				if (i - 1 >= 0) {
+					char prevC = expression.charAt(i - 1);
+					boolean isPrevAnAction = ACTIONS.indexOf(Character.toString(prevC)) >= 0;
+					if (isPrevAnAction) {
+						isAction = false;
+					}
+				}
+			}
+			if (isAction || isLastChar) {
+				// Found another action -> calculate prev and then set to curr
+				result = calcAction(Character.toString(action), result, Double.parseDouble(numberStringified));
+				action = c;
+				numberStringified = "";
+			} else {
+				// Add digit/dot
+				numberStringified += c;
+			}
+		}
+		updateOutputWithResult(result);
 	}
 
+	private double calcAction(String action, double rightNum, double leftNum) {
+		switch (action) {
+		case PLUS:
+			return rightNum + leftNum;
+		case MINUS:
+			return rightNum - leftNum;
+		case TIMES:
+			return rightNum * leftNum;
+		case DIVIDE:
+			return rightNum / leftNum;
+		default:
+			System.err.println("Invalid action! " + action + " " + rightNum + " " + leftNum);
+			return 0;
+		}
+	}
+
+	private void updateOutputWithResult(double result) {
+		output = new StringBuilder(Double.toString(result));
+		if (output.length() >= 2 && output.charAt(output.length() - 1) == ZERO_CHAR
+				&& output.charAt(output.length() - 2) == '.') {
+			output.delete(output.length() - 2, output.length());
+		}
+		updateOutputLabel();
+		isOutputShowingResult = true;
+	}
 //	public static boolean isNumeric(String str) {
 //
 //		if (str == null) {
