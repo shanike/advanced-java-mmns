@@ -282,11 +282,15 @@ public class CalculatorController {
 	}
 
 	private void handlePlusMinusInput() {
-		char firstChar = output.charAt(0);
-		if (Character.toString(firstChar).equals(MINUS)) {
-			output.deleteCharAt(0);
-		} else if (output.charAt(0) != ZERO_CHAR) {
+		if (output.length() <= 0) {
 			output.insert(0, MINUS);
+		} else {
+			char firstChar = output.charAt(0);
+			if (Character.toString(firstChar).equals(MINUS)) {
+				output.deleteCharAt(0);
+			} else if (output.charAt(0) != ZERO_CHAR) {
+				output.insert(0, MINUS);
+			}
 		}
 	}
 
