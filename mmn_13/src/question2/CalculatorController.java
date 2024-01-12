@@ -71,15 +71,16 @@ public class CalculatorController {
 
 	private boolean isOutputShowingResult = false;
 
-	/* ------------------------- end of attributes ------------------------- */
+	/* -------------------------- end of attributes --------------------------- */
+	/* ---------- start of elements creation/update handling methods ---------- */
 
 	public void initialize() {
 		resetOutput();
 		setOutputGridDimensions();
 		setOutputLabelProperties();
-		updateOutputLabel();
-		setSolveButton();
 		createInputButtons();
+		setSolveButton();
+		updateOutputLabel();
 	}
 
 	/**
@@ -95,14 +96,6 @@ public class CalculatorController {
 	private void setOutputGridDimensions() {
 		outputGrid.setPrefWidth(appGrid.getPrefWidth());
 		outputGrid.setPrefHeight(OUTPUT_ROW_HEIGHT);
-	}
-
-	/**
-	 * Sets the default width and height to a button
-	 */
-	private void setButtonDimensions(Button btn) {
-		btn.setPrefWidth(BUTTONS_WIDTH);
-		btn.setPrefHeight(BUTTONS_HEIGHT);
 	}
 
 	/**
@@ -148,6 +141,36 @@ public class CalculatorController {
 	}
 
 	/**
+	 * Sets the output (=solve) button properties
+	 */
+	private void setSolveButton() {
+		// action
+		outputButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					calculateExpression(outputLabel.getText());
+				} catch (IllegalArgumentException e) {
+					showIllegalExpressionAlert();
+				}
+			}
+		});
+		styleButton(outputButton, Color.rgb(158, 200, 185));
+		GridPane.setHalignment(outputButton, HPos.RIGHT);
+	}
+
+	/* ----------- end of elements creation/update handling methods ----------- */
+	/* -------------------- start of UI util/common methods ------------------- */
+
+	/**
+	 * Sets the default width and height to a button
+	 */
+	private void setButtonDimensions(Button btn) {
+		btn.setPrefWidth(BUTTONS_WIDTH);
+		btn.setPrefHeight(BUTTONS_HEIGHT);
+	}
+
+	/**
 	 * Style a button with button width&height, with button padding, with background
 	 * color and hover effects.
 	 * 
@@ -178,7 +201,7 @@ public class CalculatorController {
 	}
 
 	/**
-	 * A util function to lighten a color rgb.
+	 * A util function to lighten an rgb color.
 	 * 
 	 * @param color rgb
 	 * @return A lightened color of {@code color}. For being the color on hover for
@@ -197,25 +220,6 @@ public class CalculatorController {
 	}
 
 	/**
-	 * Sets the output (=solve) button properties
-	 */
-	private void setSolveButton() {
-		// action
-		outputButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				try {
-					calculateExpression(outputLabel.getText());
-				} catch (IllegalArgumentException e) {
-					showIllegalExpressionAlert();
-				}
-			}
-		});
-		styleButton(outputButton, Color.rgb(158, 200, 185));
-		GridPane.setHalignment(outputButton, HPos.RIGHT);
-	}
-
-	/**
 	 * Alert the user that the expression is invalid
 	 */
 	private void showIllegalExpressionAlert() {
@@ -224,6 +228,9 @@ public class CalculatorController {
 		alert.setHeaderText("The expression is invalid");
 		alert.showAndWait();
 	}
+
+	/* -------------------- end of ui util/common methods -------------------- */
+	/* ----------------- start of user input action methods ------------------ */
 
 	/**
 	 * @return an event handler to handle validation and changes on any new input
@@ -290,16 +297,17 @@ public class CalculatorController {
 				writeCharToOutput(btnText);
 			}
 		} else {
-			String prevCharInOutput = Character.toString(output.charAt(output.length() - 1));
+			int outputLength = output.length();
+			String prevCharInOutput = Character.toString(output.charAt(outputLength - 1));
 			boolean isPrevCharAnAction = ACTIONS.indexOf(prevCharInOutput) >= 0;
 
 			if (!isPrevCharAnAction) {
 				writeCharToOutput(btnText);
 			} else {
 				// Prev character is an action
-				boolean willBeFirstCharInOutput = output.length() <= 1;
-				boolean isPrevPrevAnAction = output.length() >= 2
-						? ACTIONS.indexOf(Character.toString(output.charAt(output.length() - 2))) >= 0
+				boolean willBeFirstCharInOutput = outputLength <= 1;
+				boolean isPrevPrevAnAction = outputLength >= 2
+						? ACTIONS.indexOf(Character.toString(output.charAt(outputLength - 2))) >= 0
 						: false;
 				if (willBeFirstCharInOutput) {
 					if (btnText.equals(PLUS)) {
@@ -348,13 +356,13 @@ public class CalculatorController {
 	}
 
 	/**
-	 * override the previous char in output with param {@code s}
+	 * Override the previous char in output with param {@code s}
 	 */
 	private void replacePrevCharInOutput(String s) {
 		if (output.length() > 0) {
 			output.deleteCharAt(output.length() - 1);
 		}
-		output.append(s);
+		writeCharToOutput(s);
 	}
 
 	/**
@@ -466,12 +474,13 @@ public class CalculatorController {
 	 */
 	private void updateOutputWithResult(double result) {
 		output = new StringBuilder(Double.toString(result));
-		if (output.length() >= 2) {
-			boolean isPrevZero = output.charAt(output.length() - 1) == ZERO_CHAR;
-			boolean isPrevPrevDot = output.charAt(output.length() - 2) == DOT_CHAR;
+		int outputLength = output.length();
+		if (outputLength >= 2) {
+			boolean isPrevZero = output.charAt(outputLength - 1) == ZERO_CHAR;
+			boolean isPrevPrevDot = output.charAt(outputLength - 2) == DOT_CHAR;
 			if (isPrevZero && isPrevPrevDot) {
 				// If output is actually an int, then remove the zero and the dot.
-				output.delete(output.length() - 2, output.length());
+				output.delete(outputLength - 2, outputLength);
 			}
 		}
 		updateOutputLabel();
