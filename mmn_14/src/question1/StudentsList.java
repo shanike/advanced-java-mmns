@@ -12,9 +12,9 @@ public class StudentsList {
 		// Create a students list of above students
 		Integer[] studentsAverageGrades = new Integer[] { 90, 80, 88 };
 		Student[] students = new Student[] { s1, s2, s3 };
-		AssociationTable<Student> studentsList;
+		AssociationTable<Student, Integer> studentsList;
 		try {
-			studentsList = new AssociationTable<Student>(students, studentsAverageGrades);
+			studentsList = new AssociationTable<Student, Integer>(students, studentsAverageGrades);
 		} catch (IllegalArgumentException e) {
 			System.err.println("ERROR creating students list: " + e.getMessage());
 			return;

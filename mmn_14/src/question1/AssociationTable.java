@@ -4,8 +4,8 @@ import java.util.TreeMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class AssociationTable<T extends Comparable<T>> {
-	private Map<T, Object> map;
+public class AssociationTable<T extends Comparable<T>, V> {
+	private Map<T, V> map;
 
 	public AssociationTable() {
 		map = new TreeMap<>();
@@ -18,7 +18,7 @@ public class AssociationTable<T extends Comparable<T>> {
 	 * @throws IllegalArgumentException if keys and values arrays are not of the
 	 *                                  same size
 	 */
-	public AssociationTable(T[] keys, Object[] values) throws IllegalArgumentException {
+	public AssociationTable(T[] keys, V[] values) throws IllegalArgumentException {
 		if (keys.length != values.length) {
 			throw new IllegalArgumentException();
 		}
@@ -37,7 +37,7 @@ public class AssociationTable<T extends Comparable<T>> {
 	 * @param newKey   the key to add
 	 * @param newValue the value of the key to add
 	 */
-	public void add(T newKey, Object newValue) {
+	public void add(T newKey, V newValue) {
 		map.put(newKey, newValue);
 	}
 
@@ -87,7 +87,7 @@ public class AssociationTable<T extends Comparable<T>> {
 	@Override
 	public String toString() {
 		String msg = "{\n";
-		for (Map.Entry<T, Object> pair : map.entrySet()) {
+		for (Map.Entry<T, V> pair : map.entrySet()) {
 			T key = pair.getKey();
 			Object value = pair.getValue();
 			msg += "\t" + key + ": " + value + ",\n";
