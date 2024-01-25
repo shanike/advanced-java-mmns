@@ -34,11 +34,19 @@ public class ContactsList {
 		}
 	}
 
+	public void put(String name, String phoneNumber) {
+		contacts.put(name, phoneNumber);
+	}
+
 	public Iterator<String> createNamesIterator() {
 		return contacts.keySet().iterator();
 	}
 
 	public String phoneNumberByName(String name) {
 		return contacts.get(name);
+	}
+
+	public void remove(String name) {
+		contacts.remove(name);
 	}
 }
