@@ -1,8 +1,8 @@
 package question2;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import question1.IllegalArgumentException;
 
@@ -13,7 +13,7 @@ public class ContactsList {
 	private Map<String, String> contacts;
 
 	public ContactsList() {
-		contacts = new HashMap<String, String>();
+		contacts = new TreeMap<String, String>();
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class ContactsList {
 	 *                                  same length.
 	 */
 	public ContactsList(String[] names, String[] phoneNumbers) throws IllegalArgumentException {
-		contacts = new HashMap<String, String>();
+		contacts = new TreeMap<String, String>();
 		if (names.length != phoneNumbers.length) {
 			throw new IllegalArgumentException();
 		}

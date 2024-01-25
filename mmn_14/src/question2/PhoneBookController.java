@@ -1,35 +1,18 @@
 package question2;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
-import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 
 import question1.IllegalArgumentException;
-
-// TODO: add a new contact
-// TODO: remove a contact
-
-// TODO: search by name
 
 public class PhoneBookController {
 
@@ -43,11 +26,6 @@ public class PhoneBookController {
 
 	@FXML
 	private VBox studentsVertBox;
-
-	@FXML
-	void handleNewContactClick(ActionEvent event) {
-		// TODO: new contact
-	}
 
 	public void initialize() {
 		setContactsList();
@@ -65,54 +43,61 @@ public class PhoneBookController {
 					"ERROR creating contacts list. falling back to an empty list. The error: " + e.getMessage());
 			contactsList = new ContactsList();
 		}
+	}
 
-//		Iterator<String> contactsIt = contactsList.createNamesIterator();
-//		while (contactsIt.hasNext()) {
-//			String contactName = contactsIt.next();
-//			System.out.println(contactName + ": " + contactsList.phoneNumberByName(contactName));
-//		}
+	@FXML
+	void handleNewContactClick(ActionEvent event) {
+		final ActionPopup popup = new ActionPopup(studentsVertBox);
+
+		// Title
+		popup.createTitle("New contact");
+
+		// Fields
+		TextField contactNameField = popup.createTextFieldWithLabel("Contact Name:", "");
+		TextField contactPhoneNumberField = popup.createTextFieldWithLabel("Contact Phone Number:", "");
+
+		// Cancel button
+		popup.createCancelButton();
+		// Save button
+		Button saveButton = popup.createSaveButton();
+		saveButton.setOnAction(e -> {
+			contactsList.put(contactNameField.getText(), contactPhoneNumberField.getText());
+			renderContactsList();
+			popup.close();
+		});
+
+		popup.open();
+	}
+
+	@FXML
+	void handleSearchChange(KeyEvent event) {
+		TextField target = (TextField) event.getTarget();
+		renderContactsList(target.getText());
 	}
 
 	private void handleUpdateContact(String contactName) {
-		final Popup popup = new Popup();
+		final ActionPopup popup = new ActionPopup(studentsVertBox);
 
-		VBox vbox = new VBox();
-		vbox.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		vbox.setPadding(new Insets(20));
-		vbox.setSpacing(20);
+		// Title
+		popup.createTitle("Edit " + contactName + "'s phone number:");
 
-		Label label = new Label("Edit " + contactName + "'s phone number:");
-
+		// Phone number text field
 		String currentPhoneNumber = contactsList.phoneNumberByName(contactName);
-		TextField newPhoneNumberField = new TextField(currentPhoneNumber);
-		newPhoneNumberField
-				.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		newPhoneNumberField.setBorder(new Border(
-				new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+		TextField newPhoneNumberField = popup.createTextField(currentPhoneNumber);
 
-		Button saveButton = new Button("Save");
-		saveButton.setBackground(
-				new Background(new BackgroundFill(Color.valueOf("#ADD8E6"), CornerRadii.EMPTY, Insets.EMPTY)));
-
-		Button cancelButton = new Button("Cancel");
-		cancelButton.setBackground(
-				new Background(new BackgroundFill(Color.valueOf("#FFB6C1"), CornerRadii.EMPTY, Insets.EMPTY)));
-
+		// Cancel button
+		popup.createCancelButton();
+		// Save button
+		Button saveButton = popup.createSaveButton();
 		saveButton.setOnAction(e -> {
 			contactsList.put(contactName, newPhoneNumberField.getText());
 			renderContactsList();
-			popup.hide();
+			popup.close();
 		});
 
-		cancelButton.setOnAction(e -> {
-			popup.hide();
-		});
+		// Open
+		popup.open();
 
-		vbox.getChildren().addAll(label, newPhoneNumberField, saveButton, cancelButton);
-		popup.getContent().addAll(vbox);
-
-		popup.show(studentsVertBox, 0, 0);
-		popup.centerOnScreen();
 	}
 
 	private void deleteContact(String contactName) {
@@ -120,19 +105,30 @@ public class PhoneBookController {
 		renderContactsList();
 	}
 
+	/**
+	 * Render ALL contacts
+	 */
 	private void renderContactsList() {
+		renderContactsList("");
+	}
+
+	/**
+	 * Render contacts which match the param {@code search}
+	 */
+	private void renderContactsList(String search) {
 		clearContactsList();
 		Iterator<String> contactsIt = contactsList.createNamesIterator();
 		int index = 0;
 		while (contactsIt.hasNext()) {
-			index++;
 			String contactName = contactsIt.next();
-			String contactPhoneNumber = contactsList.phoneNumberByName(contactName);
-			renderContact(index, contactName, contactPhoneNumber);
+			if (contactName.contains(search)) {
+				index++;
+				String contactPhoneNumber = contactsList.phoneNumberByName(contactName);
+				renderContact(index, contactName, contactPhoneNumber);
+			}
 		}
-
 	}
-	
+
 	private void clearContactsList() {
 		studentsVertBox.getChildren().removeAll(studentsVertBox.getChildren());
 	}
