@@ -51,6 +51,7 @@ public class PrimesFinderManager {
                 e.printStackTrace();
             }
         }
+        this.printPrimes();
     }
 
     public int getNumToCheck() throws Exception {
