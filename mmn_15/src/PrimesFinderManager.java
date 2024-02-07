@@ -33,15 +33,15 @@ public class PrimesFinderManager {
         this.max = max;
         this.numOfThreads = numOfThreads;
         this.numToCheck = MIN;
-        // this.primesMap = new HashMap<Integer, Boolean>();
         this.primes = new TreeSet<Integer>();
     }
 
     public void start() {
         Thread[] threads = new Thread[numOfThreads];
         for (int i = 0; i < numOfThreads; i++) {
-            IsPrime isPrime = new IsPrime(numToCheck, this);
-            threads[i] = new Thread(isPrime, Integer.toString(isPrime.id));
+            IsPrime isPrime = new IsPrime(this);
+            String isPrimeName = Integer.toString(isPrime.id);
+            threads[i] = new Thread(isPrime, isPrimeName);
             threads[i].start();
         }
         for (int i = 0; i < numOfThreads; i++) {
@@ -54,16 +54,32 @@ public class PrimesFinderManager {
         this.printPrimes();
     }
 
-    public int getNumToCheck() throws Exception {
+    /**
+     * - This method is set to {@code synchronized} to prevent getting and setting
+     * the wrong (i.e a not up-to-date) {@code numToCheck} attribute.
+     * 
+     * @return The next number that needs checking
+     * @throws ReachedMaxNumberException If all numbers have been checked and
+     *                                   therefore there is no
+     *                                   number that needs checking
+     */
+    public synchronized int getNumToCheck() throws ReachedMaxNumberException {
         int numToCheck = this.numToCheck;
         if (numToCheck > max) {
-            throw new Exception();
+            throw new ReachedMaxNumberException();
         }
         this.numToCheck++;
         return numToCheck;
     }
 
-    public void update(int num, boolean isPrime) {
+    /**
+     * Update the manager with the result: whether {@code num} {@code isPrime} or
+     * not.
+     * 
+     * - This method is set to {@code synchronized} to prevent updating the wrong
+     * (i.e a not up-to-date) {@code primes} list.
+     */
+    public synchronized void update(int num, boolean isPrime) {
         if (isPrime) {
             primes.add(num);
         }
@@ -73,7 +89,7 @@ public class PrimesFinderManager {
      * Print the list of primary integers the program found
      */
     public void printPrimes() {
-        System.out.print("The primes numbers are: ");
+        System.out.print("The prime numbers are: ");
         Iterator<Integer> primesIt = primes.iterator();
         while (primesIt.hasNext()) {
             System.out.print(primesIt.next());

@@ -37,11 +37,11 @@ public class IsPrime implements Runnable {
     @Override
     public void run() {
         while (true) {
-
             int numToCheck;
             try {
                 numToCheck = primesFinderManager.getNumToCheck();
-            } catch (Exception e) {
+            } catch (ReachedMaxNumberException e) {
+                // Break from {@code while(true)}
                 break;
             }
 
