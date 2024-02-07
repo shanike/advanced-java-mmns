@@ -6,8 +6,6 @@ import java.util.TreeSet;
  */
 public class PrimesFinderManager {
     public static int MIN = 1;
-    public static int DEFAULT_MAX = 1;
-    public static int DEFAULT_NUMBER_OF_THREADS = 0;
 
     private int max;
     private int numOfThreads;
@@ -15,13 +13,6 @@ public class PrimesFinderManager {
     private int numToCheck;
 
     private TreeSet<Integer> primes;
-
-    /**
-     * Create an instance with default values
-     */
-    public PrimesFinderManager() {
-        this(DEFAULT_MAX, DEFAULT_NUMBER_OF_THREADS);
-    }
 
     /**
      * Create an instance and set values
