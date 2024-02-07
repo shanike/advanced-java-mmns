@@ -89,7 +89,8 @@ public class PrimesFinderManager {
      * Print the list of primary integers the program found
      */
     public void printPrimes() {
-        System.out.print("The prime numbers are: ");
+        System.out.println(
+                "The prime numbers between " + MIN + " and " + max + " (using " + numOfThreads + " threads) are: ");
         Iterator<Integer> primesIt = primes.iterator();
         while (primesIt.hasNext()) {
             System.out.print(primesIt.next());
