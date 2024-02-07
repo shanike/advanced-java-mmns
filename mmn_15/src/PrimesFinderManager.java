@@ -21,6 +21,15 @@ public class PrimesFinderManager {
      * @param numOfThreads to use while finding all prime numbers
      */
     public PrimesFinderManager(int max, int numOfThreads) {
+
+        if (max < 1) {
+            throw new IllegalArgumentException("`max` must equal at least 1");
+        }
+
+        if (numOfThreads < 1) {
+            throw new IllegalArgumentException("`numOfThreads` must equal at least 1");
+        }
+
         this.max = max;
         this.numOfThreads = numOfThreads;
         this.numToCheck = MIN;
