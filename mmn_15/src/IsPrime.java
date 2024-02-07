@@ -15,13 +15,7 @@ public class IsPrime implements Runnable {
         this.primesFinderManager = primesFinderManager;
     }
 
-    // 0 true
-    // 1
-    // 2
-    // 3
-    // 4
     private static boolean isPrime(int numToCheck) {
-        // if(numToCheck <)
         int n = 2;
         while (n <= (numToCheck / 2)) {
             /** {@code num} divides by {@code i} */
@@ -48,18 +42,11 @@ public class IsPrime implements Runnable {
             try {
                 numToCheck = primesFinderManager.getNumToCheck();
             } catch (Exception e) {
-                System.out.println("[" + id + "] >> thread is DONE");
                 break;
             }
-            System.out.println("[" + id + "] Checking number " + numToCheck);
 
             // Check if number is a prime
             boolean isPrime = isPrime(numToCheck);
-            if (isPrime) {
-                System.out.println("[" + id + "] >> The number " + numToCheck + " is a prime!");
-            } else {
-                System.out.println("[" + id + "] >> The number " + numToCheck + " is NOT a prime");
-            }
 
             // Update manager
             primesFinderManager.update(numToCheck, isPrime);

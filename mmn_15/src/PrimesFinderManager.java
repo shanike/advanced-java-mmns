@@ -39,15 +39,12 @@ public class PrimesFinderManager {
 
     public void start() {
         Thread[] threads = new Thread[numOfThreads];
-        System.out.println("start");
         for (int i = 0; i < numOfThreads; i++) {
             IsPrime isPrime = new IsPrime(numToCheck, this);
-            // System.out.println("Create and start IsPrime-Thread id " + isPrime.id);
             threads[i] = new Thread(isPrime, Integer.toString(isPrime.id));
             threads[i].start();
         }
         for (int i = 0; i < numOfThreads; i++) {
-            System.out.println("Joining Thread id " + threads[i].getName());
             try {
                 threads[i].join();
             } catch (InterruptedException e) {
@@ -66,13 +63,8 @@ public class PrimesFinderManager {
     }
 
     public void update(int num, boolean isPrime) {
-        System.out.print("Updating: " + num);
         if (isPrime) {
-            System.out.println("; Prime!");
             primes.add(num);
-        }
-        else {
-            System.out.println("; Not prime!");
         }
     }
 
@@ -80,10 +72,14 @@ public class PrimesFinderManager {
      * Print the list of primary integers the program found
      */
     public void printPrimes() {
-        System.out.println("The primes are: ");
+        System.out.print("The primes numbers are: ");
         Iterator<Integer> primesIt = primes.iterator();
         while (primesIt.hasNext()) {
-            System.out.println(primesIt.next());
+            System.out.print(primesIt.next());
+            if (primesIt.hasNext()) {
+                System.out.print(", ");
+            }
         }
+        System.out.println();
     }
 }
