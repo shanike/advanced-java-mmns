@@ -6,13 +6,13 @@
  */
 public class IsPrime implements Runnable {
     private PrimesFinderManager primesFinderManager;
-    private static int totalId = 0;
+    private static int instanceCounter = 0;
     public int id = 0;
 
-    public IsPrime(int num, PrimesFinderManager primesFinderManager) {
-        totalId++;
-        id = totalId;
+    public IsPrime(PrimesFinderManager primesFinderManager) {
         this.primesFinderManager = primesFinderManager;
+        instanceCounter++;
+        id = instanceCounter;
     }
 
     private static boolean isPrime(int numToCheck) {
