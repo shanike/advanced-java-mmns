@@ -82,6 +82,8 @@ public class Drawer {
 	 * ---------------------- Functionality public methods ----------------------
 	 */
 
+	// ---------------------- philosopher ----------------------
+
 	/**
 	 * Draw philosopher in its initial state, which is not eating.
 	 */
@@ -92,19 +94,20 @@ public class Drawer {
 	}
 
 	/**
-	 * Update philosopher's state.
-	 * 
-	 * @param pIndex
-	 * @param isEating - the nnew state.
+	 * Update philosopher's state to eating.
 	 */
-	public void updatePhilosopher(int pIndex, boolean isEating) {
-		Platform.runLater(() -> {
-			Group newPhi = createPhilosopher(pIndex, isEating);
-			Group currPhi = this.philosophersNodes.get(pIndex);
-			container.getChildren().remove(currPhi);
-			renderPhilosopher(pIndex, newPhi);
-		});
+	public void updatePhilosopherToEating(int pIndex) {
+		updatePhilosopher(pIndex, true);
 	}
+
+	/**
+	 * Update philosopher's state to not eating.
+	 */
+	public void updatePhilosopherToNotEating(int pIndex) {
+		updatePhilosopher(pIndex, false);
+	}
+
+	// ---------------------- stick ----------------------
 
 	/**
 	 * Draw stick in its initial state, which is not taken.
@@ -138,6 +141,21 @@ public class Drawer {
 	/*
 	 * ---------------------- Functionality private methods ----------------------
 	 */
+
+	/**
+	 * Update philosopher's state.
+	 * 
+	 * @param pIndex
+	 * @param isEating - the nnew state.
+	 */
+	private void updatePhilosopher(int pIndex, boolean isEating) {
+		Platform.runLater(() -> {
+			Group newPhi = createPhilosopher(pIndex, isEating);
+			Group currPhi = this.philosophersNodes.get(pIndex);
+			container.getChildren().remove(currPhi);
+			renderPhilosopher(pIndex, newPhi);
+		});
+	}
 
 	/**
 	 * Updates the stick.

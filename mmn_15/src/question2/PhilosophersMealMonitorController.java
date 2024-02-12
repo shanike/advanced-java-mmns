@@ -50,6 +50,13 @@ public class PhilosophersMealMonitorController {
 		}
 	}
 
+	/**
+	 * Check whether philosopher can take both the sticks on each side. If can't ->
+	 * is added to the threads' waiting list. If can -> updates the GUI.
+	 * 
+	 * @param pIndex
+	 * @return whether or not the philosopher can take both sticks.
+	 */
 	public synchronized boolean attemptPickingUpTwoSticks(int pIndex) {
 		int stickIndex1 = pIndex;
 		int stickIndex2 = (pIndex + 1) % sticks.size();
@@ -65,24 +72,47 @@ public class PhilosophersMealMonitorController {
 			return false;
 		}
 		// Both sticks are free to use
-		sticks.get(stickIndex1).takeStick();
-		sticks.get(stickIndex2).takeStick();
-		drawer.takeStick(stickIndex1, pIndex);
-		drawer.takeStick(stickIndex2, pIndex);
-		drawer.updatePhilosopher(pIndex, true);
+		System.out.println("[" + pIndex + "] TAKING sticks");
+		takeStick(stickIndex1, pIndex);
+		takeStick(stickIndex2, pIndex);
+		drawer.updatePhilosopherToEating(pIndex);
 		return true;
 	}
 
+	/**
+	 * Updates the GUI and notifies waiting threads.
+	 * 
+	 * @param pIndex
+	 */
 	public synchronized void returnSticks(int pIndex) {
 		int stickIndex1 = pIndex;
 		int stickIndex2 = (pIndex + 1) % sticks.size();
 		System.out.println("[" + pIndex + "] returned the sticks " + stickIndex1 + " and " + stickIndex2);
-		this.sticks.get(stickIndex1).returnStick();
-		this.sticks.get(stickIndex2).returnStick();
-		drawer.returnStick(stickIndex1);
-		drawer.returnStick(stickIndex2);
-		drawer.updatePhilosopher(pIndex, false);
+		returnStick(stickIndex1);
+		returnStick(stickIndex2);
+		drawer.updatePhilosopherToNotEating(pIndex);
 		notifyAll();
+	}
+
+	/**
+	 * Take stick by updating both the sticks list and the GUI
+	 * 
+	 * @param stickIndex
+	 * @param pIndex
+	 */
+	private void takeStick(int stickIndex, int pIndex) {
+		sticks.get(stickIndex).takeStick();
+		drawer.takeStick(stickIndex, pIndex);
+	}
+
+	/**
+	 * Return stick by updating both the sticks list and the GUI
+	 * 
+	 * @param stickIndex
+	 */
+	private void returnStick(int stickIndex) {
+		sticks.get(stickIndex).returnStick();
+		drawer.returnStick(stickIndex);
 	}
 
 }

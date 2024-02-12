@@ -50,7 +50,7 @@ public class Philosopher implements Runnable {
 		try {
 			double sleepDurationSeconds = randomBetween(3, 6);
 			System.out.println(
-					"[" + id + "] TOOK -> is " + action + " for " + sleepDurationSeconds + " seconds");
+					"[" + id + "] is " + action + " for " + sleepDurationSeconds + " seconds");
 			Thread.sleep((long) secondsToMilliseconds(sleepDurationSeconds));
 		} catch (InterruptedException e) {
 			System.out.println("ERROR sleeping:");
